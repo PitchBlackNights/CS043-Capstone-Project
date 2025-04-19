@@ -1,0 +1,35 @@
+PROJECT ROOT
+ |_ main.py (where the main code lives)
+ |_ ui.py
+ |   |_ clear_screen()
+ |   \_ UI (Type/Class)
+ |       |_  new(*options: str | list[str, str], header: bool = True) -> UI
+ |       |_  show()
+ |       \_  get_choice() -> str
+ |_ sudoku.py
+ |   \_ Board (Type/Class)
+ |       |_ generate(seed: int) -> Board
+ |       |_ gameify(difficulty: int) -> Board
+ |       |_ to_str() -> str
+ |       |_ from_saved(saved_board: ___) -> Board
+ |       \_ to_saved() -> ___
+ \_ files.py
+     |_ get_saved_boards() -> list[Board]
+     \_ save_boards(boards: list[Board])
+
+
+
+BOARD
+╭───────┬───────┬───────╮
+│ 1 2 3 │ 1 2 3 │ 1 2 3 │
+│ 4 5 6 │ 4 5 6 │ 4 5 6 │
+│ 7 8 9 │ 7 8 9 │ 7 8 9 │
+├───────┼───────┼───────┤
+│ 1 2 3 │ 1 2 3 │ 1 2 3 │
+│ 4 5 6 │ 4 5 6 │ 4 5 6 │
+│ 7 8 9 │ 7 8 9 │ 7 8 9 │
+├───────┼───────┼───────┤
+│ 1 2 3 │ 1 2 3 │ 1 2 3 │
+│ 4 5 6 │ 4 5 6 │ 4 5 6 │
+│ 7 8 9 │ 7 8 9 │ 7 8 9 │
+╰───────┴───────┴───────╯
