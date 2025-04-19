@@ -6,18 +6,14 @@
 
 
 from board import Board
-import files
+from ui import clear_screen, UI
 
 
-tmp_board: Board = Board()
-tmp_board.generate(100)
-print(tmp_board.format())
-print()
-
-files.save_board(tmp_board)
-
-saved_boards: list[Board] = files.load_saved_boards()
-for board in saved_boards:
-    print(f"ID: {board.id}")
-    print(board.format())
-    print()
+clear_screen()
+tmp_ui: UI = UI(
+    title="Test",
+    header=True,
+    options=[("1", "Option 1"), ("2", "Option 2"), ("+", "Option +")],
+)
+tmp_ui.show()
+print(f"USER CHOICE: {tmp_ui.get_choice()}")
