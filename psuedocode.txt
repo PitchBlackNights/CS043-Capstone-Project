@@ -1,0 +1,49 @@
+find saved boards
+load saved boards into list
+show main menu
+wait for user choice (view boards, generate boards, exit)
+if user choice == exit:
+	save generated boards to files
+	exit
+elif user choice == view boards:
+	show board filters (filled, starter)
+	wait for user choice (exit if chosen)
+	if user choice == filled:
+		repeat:
+			show id list of filled boards
+			wait for user choice (exit if chosen)
+			display board from user choice
+	elif user choice == starter:
+		show board filters (easy, medium, hard)
+		wait for user choice (exit if chosen)
+		repeat:
+			show id list for user choice boards
+			wait for user choice (exit if chosen)
+			display board from user choice
+elif user choice == generate boards:
+	show board choices (filled, starter)
+	wait for user choice (exit if chosen)
+	if user choice == filled:
+		wait for user choice (number of board to generate, exit if chosen)
+		generate user choice number of boards
+		repeat:
+			show current filled board
+			show user options (save, next (only if boards are left))
+			wait for user choice (exit if chosen)
+			if user choice == save:
+				save board
+			elif user choice == next:
+				set current filled board to next filled board
+	elif user choice == starter:
+		show board filters (easy, medium, hard)
+		wait for user choice (exit if chosen)
+		wait for user choice (number of board to generate, exit if chosen)
+		generate user choice number of boards at user choice difficulty
+		repeat:
+			show current filled board
+			show user options (save, next (only if boards are left))
+			wait for user choice (exit if chosen)
+			if user choice == save:
+				save board
+			elif user choice == next:
+				set current filled board to next filled board
