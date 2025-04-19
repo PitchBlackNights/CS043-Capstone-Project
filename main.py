@@ -6,11 +6,18 @@
 
 
 from board import Board
+from copy import deepcopy
 
 
-for cycle in range(10):
-    board: Board = Board()
-    board.generate(cycle)
-    print(f"Seed: {cycle}")
-    print(board.format())
-    print("\n")
+board: Board = Board()
+board.generate(100)
+print(board.format())
+print()
+
+serialized: tuple[int, int, list[list[str]]] = board.serialize()
+print(board.serialize())
+
+deserialized: Board = Board()
+deserialized.deserialize(serialized)
+print(deserialized.format())
+

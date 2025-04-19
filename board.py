@@ -1,16 +1,17 @@
-from enum import Enum
+from enum import IntEnum
 from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
+import random
 
 
 class Board:
-    class Type(Enum):
+    class Type(IntEnum):
         NONE = 0
         FULL = 1
         GAME = 2
 
-    class Difficulty(Enum):
+    class Difficulty(IntEnum):
         NONE = 0
         EASY = 1
         MEDIUM = 2
@@ -37,6 +38,37 @@ class Board:
         for _ in range(9):
             self.__board.append(deepcopy(row_hide))
 
+    def gameify(self, difficulty: Difficulty) -> None:
+        """Removes n cells from the generated board"""
+        if not self.generated:
+            raise Exception("Called `Board.gameify()` on an ungenerated board!")
+
+        if not self.difficulty == Board.Difficulty.NONE:
+            raise Exception("Called `Board.gameify()` on an already gameified board!")
+
+        self.difficulty: Board.Difficulty = difficulty
+
+        # Only remove a certain number of cells, based on the difficulty
+        if difficulty == Board.Difficulty.MEDIUM:
+            num_to_remove: int = 37
+        elif difficulty == Board.Difficulty.HARD:
+            num_to_remove: int = 46
+        else:  # Equivalent to `difficulty == Board.Difficulty.EASY`
+            num_to_remove: int = 28
+
+        # Gather list of cell coordinates for `random.sample()`
+        cells: list[tuple[int, int]] = []
+        for y in range(len(self.board)):
+            for x in range(len(self.board[y])):
+                cells.append((x, y))
+        removed_cells = random.sample(cells, num_to_remove)
+
+        # Remove cells from `self.board`
+        for y in range(len(self.board)):
+            for x in range(len(self.board[y])):
+                if (x, y) in removed_cells:
+                    self.board[y][x] = " "
+
     def format(self) -> str:
         """Returns the stored Sudoku board as a formatted string table"""
         head: str = "╭───────┬───────┬───────╮"
@@ -61,7 +93,7 @@ class Board:
 
     def serialize(
         self,
-    ) -> tuple[int | Type, int | Difficulty, list[list[str]]]:
+    ) -> tuple[int, int, list[list[str]]]:
         """Pack all board data into a Tuple"""
         if not self.generated:
             raise Exception("Called `Board.serialize()` on an ungenerated board!")
@@ -69,7 +101,7 @@ class Board:
 
     def deserialize(
         self,
-        data: tuple[int | Type, int | Difficulty, list[list[str]]],
+        data: tuple[int, int, list[list[str]]],
     ) -> None:
         """Unpack all board data from a Tuple"""
         self.type: Board.Type = Board.Type(data[0])
@@ -98,8 +130,8 @@ class Board:
             # List of cells with lowest entropy
             coords: list[tuple[int, int]] = []
 
-            for y in range(9):
-                for x in range(9):
+            for y in range(len(self.__board)):
+                for x in range(len(self.__board[y])):
                     if self.__board[y][x].get_entropy() == lowest_entropy:
                         coords.append((x, y))
 
@@ -131,6 +163,8 @@ class Board:
         for y in range(9):
             for x in range(9):
                 self.board[y][x] = str(self.__board[y][x].get_value())
+
+        self.type = Board.Type.FULL
 
     def __get_lowest_entropy(self) -> int:
         """Returns the lowest, non-zero, cell entropy"""
