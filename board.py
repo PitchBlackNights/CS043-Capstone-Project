@@ -64,7 +64,7 @@ class Board:
         """Pack all board data into a Tuple"""
         if not self.generated:
             raise Exception("Called `Board.serialize()` on an ungenerated board!")
-        return [self.seed, self.type, self.difficulty, self.board]
+        return (self.seed, self.type, self.difficulty, self.board)
 
     def deserialize(
         self, data: tuple[int, int | Type, int | Difficulty, list[list[str]]]
