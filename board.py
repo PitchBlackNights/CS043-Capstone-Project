@@ -2,6 +2,7 @@ from enum import Enum
 from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
+from typing import Any
 
 
 class Board:
@@ -17,7 +18,7 @@ class Board:
         HARD = 3
 
     def __init__(self) -> None:
-        self.seed: int = 0
+        self.state: tuple[Any, ...] = ()
         self.type: Board.Type = Board.Type.NONE
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE
         self.board: list[list[str]] = []
@@ -60,17 +61,20 @@ class Board:
 
         return text
 
-    def serialize(self) -> tuple[int, int | Type, int | Difficulty, list[list[str]]]:
+    def serialize(
+        self,
+    ) -> tuple[tuple[Any, ...], int | Type, int | Difficulty, list[list[str]]]:
         """Pack all board data into a Tuple"""
         if not self.generated:
             raise Exception("Called `Board.serialize()` on an ungenerated board!")
-        return (self.seed, self.type, self.difficulty, self.board)
+        return (self.state, self.type, self.difficulty, self.board)
 
     def deserialize(
-        self, data: tuple[int, int | Type, int | Difficulty, list[list[str]]]
+        self,
+        data: tuple[tuple[Any, ...], int | Type, int | Difficulty, list[list[str]]],
     ) -> None:
         """Unpack all board data from a Tuple"""
-        self.seed: int = data[0]
+        self.state: tuple[Any, ...] = data[0]
         self.type: Board.Type = Board.Type(data[1])
         self.difficulty: Board.Difficulty = Board.Difficulty(data[2])
         self.board: list[list[str]] = data[3]
@@ -81,8 +85,8 @@ class Board:
         if self.generated:
             raise Exception("Called `Board.generate()` on an already generated board!")
 
-        self.seed: int = seed
-        Rand.set_seed(seed) # type: ignore
+        Rand.set_seed(seed)  # type: ignore
+        self.state: tuple[Any, ...] = Rand.get_state()  # type: ignore
 
         while True:
             if self.__has_contradiction():
@@ -105,7 +109,7 @@ class Board:
 
             # Select random cell out of the cells with the lowest entropy
             # Coords is guaranteed to be populated because the board is not currently solved
-            selected_cell_index: int = Rand.random() % len(coords) # type: ignore
+            selected_cell_index: int = Rand.random() % len(coords)  # type: ignore
             x, y = coords[selected_cell_index]
 
             # Collapse cell
@@ -116,8 +120,8 @@ class Board:
 
             # Update row and column choices
             for index in range(9):
-                self.__board[y][index].remove_choice(value) # type: ignore
-                self.__board[index][x].remove_choice(value) # type: ignore
+                self.__board[y][index].remove_choice(value)  # type: ignore
+                self.__board[index][x].remove_choice(value)  # type: ignore
 
             # Update box choices
             box_x: int = x // 3
@@ -125,7 +129,7 @@ class Board:
 
             for y in range(box_y * 3, (box_y * 3) + 3):
                 for x in range(box_x * 3, (box_x * 3) + 3):
-                    self.__board[y][x].remove_choice(value) # type: ignore
+                    self.__board[y][x].remove_choice(value)  # type: ignore
 
         # Copy cell values from `self.__board` to `self.board`
         for y in range(9):

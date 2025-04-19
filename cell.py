@@ -2,6 +2,7 @@ from typing import Optional
 from rand_man import Rand
 from copy import deepcopy
 
+
 class Cell:
     def __init__(self):
         self.options: list[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
@@ -35,7 +36,7 @@ class Cell:
         if (len(self.options) == 0) and (self.value == None):
             raise Exception("Cell has no valid states, the universe will explode!")
 
-        choice_index: int = Rand.random() % len(self.options) # type: ignore
+        choice_index: int = Rand.random() % len(self.options)  # type: ignore
         choice = deepcopy(self.options[choice_index])
         self.options = []
 

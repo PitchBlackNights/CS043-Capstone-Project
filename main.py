@@ -6,9 +6,12 @@
 
 
 from board import Board
+from rand_man import Rand
 
 
 for cycle in range(10):
     board: Board = Board()
     board.generate(cycle)
+    print(f"Seed: {cycle}")
     print(board.format())
+    print("\n")
