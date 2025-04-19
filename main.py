@@ -6,7 +6,6 @@
 
 
 from board import Board
-from rand_man import Rand
 
 
 for cycle in range(10):

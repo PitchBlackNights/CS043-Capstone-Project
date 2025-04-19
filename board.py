@@ -2,7 +2,6 @@ from enum import Enum
 from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
-from typing import Any
 
 
 class Board:
@@ -18,7 +17,6 @@ class Board:
         HARD = 3
 
     def __init__(self) -> None:
-        self.state: tuple[Any, ...] = ()
         self.type: Board.Type = Board.Type.NONE
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE
         self.board: list[list[str]] = []
@@ -63,21 +61,20 @@ class Board:
 
     def serialize(
         self,
-    ) -> tuple[tuple[Any, ...], int | Type, int | Difficulty, list[list[str]]]:
+    ) -> tuple[int | Type, int | Difficulty, list[list[str]]]:
         """Pack all board data into a Tuple"""
         if not self.generated:
             raise Exception("Called `Board.serialize()` on an ungenerated board!")
-        return (self.state, self.type, self.difficulty, self.board)
+        return (self.type, self.difficulty, self.board)
 
     def deserialize(
         self,
-        data: tuple[tuple[Any, ...], int | Type, int | Difficulty, list[list[str]]],
+        data: tuple[int | Type, int | Difficulty, list[list[str]]],
     ) -> None:
         """Unpack all board data from a Tuple"""
-        self.state: tuple[Any, ...] = data[0]
-        self.type: Board.Type = Board.Type(data[1])
-        self.difficulty: Board.Difficulty = Board.Difficulty(data[2])
-        self.board: list[list[str]] = data[3]
+        self.type: Board.Type = Board.Type(data[0])
+        self.difficulty: Board.Difficulty = Board.Difficulty(data[1])
+        self.board: list[list[str]] = data[2]
         self.generated: bool = True
 
     def generate(self, seed: int) -> None:
@@ -86,7 +83,6 @@ class Board:
             raise Exception("Called `Board.generate()` on an already generated board!")
 
         Rand.set_seed(seed)  # type: ignore
-        self.state: tuple[Any, ...] = Rand.get_state()  # type: ignore
 
         while True:
             if self.__has_contradiction():
@@ -161,7 +157,6 @@ class Board:
     def __reset(self):
         """Resets the board"""
         self.__board: list[list[Cell]] = []
-        self.state: tuple[Any, ...] = Rand.get_state()  # type: ignore
 
         # Populate `self.__board` with a 2D list with 9x9 dimensions
         row: list[Cell] = []
