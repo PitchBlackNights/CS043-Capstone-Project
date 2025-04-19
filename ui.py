@@ -15,7 +15,7 @@ class UI:
         self.header: bool = header
         self.options: list[tuple[str, str]] = options
 
-    def show(self):
+    def show(self, clr_screen = True):
         """Prints out this UI interface"""
         text: str = ""
         if self.header:
