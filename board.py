@@ -196,7 +196,7 @@ class Board:
 
         return False
 
-    def __reset(self):
+    def __reset(self) -> None:
         """Resets the board"""
         self.__board: list[list[Cell]] = []
 

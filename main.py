@@ -6,17 +6,18 @@
 
 
 from board import Board
+import files
 
 
-board: Board = Board()
-board.generate(100)
-print(board.format())
+tmp_board: Board = Board()
+tmp_board.generate(100)
+print(tmp_board.format())
 print()
 
-serialized: str = board.serialize()
-print(board.serialize())
+files.save_board(tmp_board)
 
-deserialized: Board = Board()
-deserialized.deserialize(serialized)
-print(deserialized.format())
-
+saved_boards: list[Board] = files.load_saved_boards()
+for board in saved_boards:
+    print(f"ID: {board.id}")
+    print(board.format())
+    print()
