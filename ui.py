@@ -23,6 +23,8 @@ class UI:
         for option_key, option_text in self.options:
             text += f"[{option_key}] {option_text}\n"
 
+        if clr_screen:
+            clear_screen()
         print(text)
 
     def get_choice(self) -> str:
