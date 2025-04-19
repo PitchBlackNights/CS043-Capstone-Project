@@ -34,6 +34,12 @@ def load_saved_boards() -> list[Board]:
     # Get list of all filenames within `save_dir`
     filenames = next(os.walk(save_dir), (None, None, []))[2]
 
+    # Sort the files based on numerical value instead of characters
+    for i in range(len(filenames)):
+        for j in range(i + 1, len(filenames)):
+            if int(filenames[i][:-6]) > int(filenames[j][:-6]):
+                filenames[i], filenames[j] = filenames[j], filenames[i]
+
     # Loop `filenames` and initialize + deserialize each save file
     boards: list[Board] = []
     for filename in filenames:
