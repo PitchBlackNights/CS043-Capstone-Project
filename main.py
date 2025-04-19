@@ -8,7 +8,6 @@
 from board import Board
 
 
-# BUG: Cell value sometimes collapses to None without triggering Exception
 for cycle in range(10):
     board: Board = Board()
     board.generate(cycle)

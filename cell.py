@@ -21,7 +21,7 @@ class Cell:
 
     def has_contradiction(self) -> bool:
         """Is the cell not collapsed and has 0 entropy?"""
-        return (not self.is_collapsed()) and (self.get_entropy == 0)
+        return (not self.is_collapsed()) and (self.get_entropy() == 0)
 
     def remove_choice(self, val: int) -> None:
         """Removes `val` from cell's `options`"""

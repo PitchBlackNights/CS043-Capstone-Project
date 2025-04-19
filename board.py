@@ -137,7 +137,7 @@ class Board:
         lowest_entropy: int = 10
 
         for y in range(len(self.__board)):
-            for x in range(len(self.__board)):
+            for x in range(len(self.__board[y])):
                 entropy: int = self.__board[y][x].get_entropy()
 
                 if (entropy < lowest_entropy) and (entropy > 0):
@@ -148,7 +148,7 @@ class Board:
     def __has_contradiction(self) -> bool:
         """Does any cell have a contradiction?"""
         for y in range(len(self.__board)):
-            for x in range(len(self.__board)):
+            for x in range(len(self.__board[y])):
                 if self.__board[y][x].has_contradiction():
                     return True
 
@@ -156,6 +156,9 @@ class Board:
 
     def __reset(self):
         """Resets the board"""
+        self.__board: list[list[Cell]] = []
+        self.state: tuple[Any, ...] = Rand.get_state()  # type: ignore
+
         # Populate `self.__board` with a 2D list with 9x9 dimensions
         row: list[Cell] = []
         for _ in range(9):
