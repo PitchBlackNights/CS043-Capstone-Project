@@ -10,7 +10,7 @@ class UI:
         self, title: str = "", header: bool = True, options: list[tuple[str, str]] = []
     ):
         self.header_text: str = (
-            f"SUDOKU BOARD GENERATOR  v0.1\n{title}\n=============================\n"
+            f"SUDOKU BOARD GENERATOR  v0.1\n{title}\n============================="
         )
         self.header: bool = header
         self.options: list[tuple[str, str]] = options
@@ -19,7 +19,7 @@ class UI:
         """Prints out this UI interface"""
         text: str = ""
         if self.header:
-            text += self.header_text
+            text += f"{self.header_text}{"\n" if len(self.options) != 0 else ""}"
         for option_key, option_text in self.options:
             text += f"[{option_key}] {option_text}\n"
 
