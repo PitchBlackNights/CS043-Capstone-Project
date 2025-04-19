@@ -48,6 +48,7 @@ class Board:
             raise Exception("Called `Board.gameify()` on an already gameified board!")
 
         self.difficulty: Board.Difficulty = difficulty
+        self.type: Board.Type = Board.Type.GAME
 
         # Only remove a certain number of cells, based on the difficulty
         if difficulty == Board.Difficulty.MEDIUM:
