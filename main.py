@@ -6,7 +6,6 @@
 
 
 from board import Board
-from copy import deepcopy
 
 
 board: Board = Board()
@@ -14,7 +13,7 @@ board.generate(100)
 print(board.format())
 print()
 
-serialized: tuple[int, int, list[list[str]]] = board.serialize()
+serialized: str = board.serialize()
 print(board.serialize())
 
 deserialized: Board = Board()

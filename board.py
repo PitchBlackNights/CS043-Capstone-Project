@@ -2,7 +2,7 @@ from enum import IntEnum
 from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
-import random
+import random, json
 
 
 class Board:
@@ -18,6 +18,7 @@ class Board:
         HARD = 3
 
     def __init__(self) -> None:
+        self.id: str = ""
         self.type: Board.Type = Board.Type.NONE
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE
         self.board: list[list[str]] = []
@@ -93,20 +94,26 @@ class Board:
 
     def serialize(
         self,
-    ) -> tuple[int, int, list[list[str]]]:
+    ) -> str:
         """Pack all board data into a Tuple"""
-        if not self.generated:
-            raise Exception("Called `Board.serialize()` on an ungenerated board!")
-        return (self.type, self.difficulty, self.board)
+        data = {
+            "id": self.id,
+            "type": int(self.type),
+            "difficulty": int(self.difficulty),
+            "board": self.board,
+        }
+        return json.dumps(data)
 
     def deserialize(
         self,
-        data: tuple[int, int, list[list[str]]],
+        data_str: str,
     ) -> None:
         """Unpack all board data from a Tuple"""
-        self.type: Board.Type = Board.Type(data[0])
-        self.difficulty: Board.Difficulty = Board.Difficulty(data[1])
-        self.board: list[list[str]] = data[2]
+        data = json.loads(data_str)
+        self.id: str = data["id"]
+        self.type: Board.Type = Board.Type(data["type"])
+        self.difficulty: Board.Difficulty = Board.Difficulty(data["difficulty"])
+        self.board: list[list[str]] = data["board"]
         self.generated: bool = True
 
     def generate(self, seed: int) -> None:
@@ -115,6 +122,7 @@ class Board:
             raise Exception("Called `Board.generate()` on an already generated board!")
 
         Rand.set_seed(seed)  # type: ignore
+        self.id: str = str(seed)
 
         while True:
             if self.__has_contradiction():
