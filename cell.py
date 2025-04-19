@@ -35,7 +35,7 @@ class Cell:
         if (len(self.options) == 0) and (self.value == None):
             raise Exception("Cell has no valid states, the universe will explode!")
 
-        choice_index: int = Rand.random() % len(self.options)
+        choice_index: int = Rand.random() % len(self.options) # type: ignore
         choice = deepcopy(self.options[choice_index])
         self.options = []
 

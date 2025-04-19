@@ -25,18 +25,18 @@ class Board:
         self.generated: bool = False
 
         # Populate `self.board` with a 2D list with 9x9 dimensions
-        row: list[str] = []
+        row_norm: list[str] = []
         for _ in range(9):
-            row.append(" ")
+            row_norm.append(" ")
         for _ in range(9):
-            self.board.append(deepcopy(row))
+            self.board.append(deepcopy(row_norm))
 
         # Populate `self.__board` with a 2D list with 9x9 dimensions
-        row: list[Cell] = []
+        row_hide: list[Cell] = []
         for _ in range(9):
-            row.append(Cell())
+            row_hide.append(Cell())
         for _ in range(9):
-            self.__board.append(deepcopy(row))
+            self.__board.append(deepcopy(row_hide))
 
     def format(self) -> str:
         """Returns the stored Sudoku board as a formatted string table"""
@@ -70,19 +70,19 @@ class Board:
         self, data: tuple[int, int | Type, int | Difficulty, list[list[str]]]
     ) -> None:
         """Unpack all board data from a Tuple"""
-        self.seed = data[0]
-        self.type = Board.Type(data[1])
-        self.difficulty = Board.Difficulty(data[2])
-        self.board = data[3]
-        self.generated = True
+        self.seed: int = data[0]
+        self.type: Board.Type = Board.Type(data[1])
+        self.difficulty: Board.Difficulty = Board.Difficulty(data[2])
+        self.board: list[list[str]] = data[3]
+        self.generated: bool = True
 
     def generate(self, seed: int) -> None:
         """Generate a board with the provided seed"""
         if self.generated:
             raise Exception("Called `Board.generate()` on an already generated board!")
 
-        self.seed = seed
-        Rand.set_seed(seed)
+        self.seed: int = seed
+        Rand.set_seed(seed) # type: ignore
 
         while True:
             if self.__has_contradiction():
@@ -105,7 +105,7 @@ class Board:
 
             # Select random cell out of the cells with the lowest entropy
             # Coords is guaranteed to be populated because the board is not currently solved
-            selected_cell_index: int = Rand.random() % len(coords)
+            selected_cell_index: int = Rand.random() % len(coords) # type: ignore
             x, y = coords[selected_cell_index]
 
             # Collapse cell
@@ -116,8 +116,8 @@ class Board:
 
             # Update row and column choices
             for index in range(9):
-                self.__board[y][index].remove_choice(value)
-                self.__board[index][x].remove_choice(value)
+                self.__board[y][index].remove_choice(value) # type: ignore
+                self.__board[index][x].remove_choice(value) # type: ignore
 
             # Update box choices
             box_x: int = x // 3
@@ -125,7 +125,7 @@ class Board:
 
             for y in range(box_y * 3, (box_y * 3) + 3):
                 for x in range(box_x * 3, (box_x * 3) + 3):
-                    self.__board[y][x].remove_choice(value)
+                    self.__board[y][x].remove_choice(value) # type: ignore
 
         # Copy cell values from `self.__board` to `self.board`
         for y in range(9):
