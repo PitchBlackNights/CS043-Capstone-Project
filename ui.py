@@ -2,6 +2,7 @@ import time
 
 
 def clear_screen() -> None:
+    """Clear the terminal screen"""
     print("\x1b[2J\x1b[H", end="")
 
 
@@ -9,6 +10,7 @@ class UI:
     def __init__(
         self, title: str = "", header: bool = True, options: list[tuple[str, str]] = []
     ):
+        # Initialize the UI with a title, header, and options
         self.header_text: str = (
             f"SUDOKU BOARD GENERATOR  v0.1\n{title}\n============================="
         )
@@ -16,7 +18,7 @@ class UI:
         self.options: list[tuple[str, str]] = options
 
     def show(self, clr_screen: bool = True):
-        """Prints out this UI interface"""
+        """Display the UI on the screen"""
         text: str = ""
         if self.header:
             text += self.header_text + ("\n" if len(self.options) != 0 else "")
@@ -28,6 +30,7 @@ class UI:
         print(text)
 
     def get_choice(self) -> str:
+        """Get a valid choice from the user"""
         valid_keys: list[str] = [key for key, _ in self.options]
         while True:
             user_choice: str = input("Option: ")

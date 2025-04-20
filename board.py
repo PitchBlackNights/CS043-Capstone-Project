@@ -31,6 +31,7 @@ class Board:
             return text
 
     def __init__(self) -> None:
+        # Initialize the board with default values
         self.id: str = ""
         self.type: Board.Type = Board.Type.NONE
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE
@@ -53,7 +54,7 @@ class Board:
             self.__board.append(deepcopy(row_hide))
 
     def gameify(self, difficulty: Difficulty) -> None:
-        """Removes n cells from the generated board"""
+        """Convert a full board into a game board by removing cells"""
         if not self.generated:
             raise Exception("Called `Board.gameify()` on an ungenerated board!")
 
@@ -109,7 +110,7 @@ class Board:
     def serialize(
         self,
     ) -> str:
-        """Pack all board data into a Tuple"""
+        """Serialize the board data into a JSON string"""
         data: dict[str, str | int | list[list[str]]] = {
             "id": self.id,
             "type": int(self.type),
@@ -122,7 +123,7 @@ class Board:
         self,
         data_str: str,
     ) -> None:
-        """Unpack all board data from a Tuple"""
+        """Deserialize the board data from a JSON string"""
         data = json.loads(data_str)
         self.id: str = data["id"]
         if int(data["id"]) > Board.last_seed:

@@ -1,7 +1,7 @@
 from board import Board
 import os, pathlib
 
-
+# Directory to save boards
 save_dir = os.path.abspath("./saved_boards")
 
 
@@ -27,7 +27,7 @@ def save_board(board: Board) -> None:
 
 
 def load_saved_boards() -> list[Board]:
-    """Load all saved boards on disk"""
+    """Load all saved boards from disk"""
     # Make sure the save directory actually exists
     pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
 

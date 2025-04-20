@@ -35,6 +35,7 @@ def get_int(text: str) -> int:
 
 
 def main_menu() -> None:
+    """Main menu loop"""
     while True:
         main_menu_ui: UI = UI(
             title="Main Menu",
@@ -57,6 +58,7 @@ def main_menu() -> None:
 
 
 def generate_boards() -> None:
+    """Menu for generating boards"""
     while True:
         generate_boards_ui: UI = UI(
             title="Generate Boards",
@@ -88,6 +90,7 @@ def generate_boards() -> None:
 
 
 def generate_boards__filled_boards() -> None:
+    """Menu for generating filled boards"""
     num_to_gen: int = get_int("Number of boards to generate: ")
     for cycle in range(num_to_gen):
         board = Board()
@@ -126,6 +129,7 @@ def generate_boards__filled_boards() -> None:
 
 
 def generate_boards__game_boards() -> None:
+    """Menu for generating game boards"""
     num_to_gen: int = get_int("Number of boards to generate: ")
     print("What difficulty level?")
     options_ui: UI = UI(
@@ -173,6 +177,7 @@ def generate_boards__game_boards() -> None:
 
 
 def view_boards() -> None:
+    """Menu for viewing saved boards"""
     while True:
         # Load saved boards into appropriate lists
         saved_boards: list[Board] = files.load_saved_boards()
@@ -216,6 +221,7 @@ def view_boards() -> None:
 
 
 def view_boards__filled_boards(boards_per_page: int) -> None:
+    """Menu for viewing saved filled boards"""
     board_page: int = 0
     pages: int = math.ceil(len(filled_boards) / boards_per_page)
 
@@ -271,6 +277,7 @@ def view_boards__filled_boards(boards_per_page: int) -> None:
 
 
 def view_boards__game_boards(boards_per_page: int) -> None:
+    """Menu for viewing saved game boards"""
     board_page: int = 0
     pages: int = math.ceil(len(game_boards) / boards_per_page)
 
@@ -330,7 +337,7 @@ def view_boards__game_boards(boards_per_page: int) -> None:
             input("Press enter to continue...")
 
 
-# Load saved boards into appropriate lists
+# Load saved boards into separate lists for filled and game boards
 saved_boards: list[Board] = files.load_saved_boards()
 filled_boards: list[Board] = []
 game_boards: list[Board] = []
@@ -340,4 +347,5 @@ for board in saved_boards:
     elif board.type == Board.Type.GAME:
         game_boards.append(board)
 
+# Start the main menu
 main_menu()

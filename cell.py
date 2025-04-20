@@ -5,6 +5,7 @@ from copy import deepcopy
 
 class Cell:
     def __init__(self):
+        # Initialize cell with all possible values and no set value
         self.options: list[int] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
         self.value: Optional[int] = None
 
