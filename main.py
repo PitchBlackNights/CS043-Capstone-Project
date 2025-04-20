@@ -215,7 +215,7 @@ def view_boards() -> None:
             view_boards__game_boards(boards_per_page)
 
 
-def view_boards__filled_boards(boards_per_page) -> None:
+def view_boards__filled_boards(boards_per_page: int) -> None:
     board_page: int = 0
     pages: int = math.ceil(len(filled_boards) / boards_per_page)
 
@@ -270,12 +270,12 @@ def view_boards__filled_boards(boards_per_page) -> None:
             input("Press enter to continue...")
 
 
-def view_boards__game_boards(boards_per_page) -> None:
+def view_boards__game_boards(boards_per_page: int) -> None:
     board_page: int = 0
     pages: int = math.ceil(len(game_boards) / boards_per_page)
 
     while True:
-        ui_options = []
+        ui_options: list[tuple[str, str]] = []
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(game_boards)),

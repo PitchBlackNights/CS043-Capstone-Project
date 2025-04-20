@@ -110,7 +110,7 @@ class Board:
         self,
     ) -> str:
         """Pack all board data into a Tuple"""
-        data = {
+        data: dict[str, str | int | list[list[str]]] = {
             "id": self.id,
             "type": int(self.type),
             "difficulty": int(self.difficulty),

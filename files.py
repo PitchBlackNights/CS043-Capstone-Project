@@ -32,7 +32,7 @@ def load_saved_boards() -> list[Board]:
     pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
 
     # Get list of all filenames within `save_dir`
-    filenames = next(os.walk(save_dir), (None, None, []))[2]
+    filenames: list[str] = next(os.walk(save_dir), (None, None, []))[2]  # type: ignore
 
     # Sort the files based on numerical value instead of characters
     for i in range(len(filenames)):
