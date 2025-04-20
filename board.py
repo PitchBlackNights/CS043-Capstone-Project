@@ -6,6 +6,8 @@ import random, json
 
 
 class Board:
+    last_seed: int = 0
+
     class Type(IntEnum):
         NONE = 0
         FULL = 1
@@ -16,6 +18,17 @@ class Board:
         EASY = 1
         MEDIUM = 2
         HARD = 3
+
+        def __str__(self) -> str:
+            text = ""
+            if self.value == 1:
+                text = "Easy"
+            elif self.value == 2:
+                text = "Medium"
+            elif self.value == 3:
+                text = "Hard"
+
+            return text
 
     def __init__(self) -> None:
         self.id: str = ""
@@ -112,6 +125,8 @@ class Board:
         """Unpack all board data from a Tuple"""
         data = json.loads(data_str)
         self.id: str = data["id"]
+        if int(data["id"]) > Board.last_seed:
+            Board.last_seed: int = int(data["id"])
         self.type: Board.Type = Board.Type(data["type"])
         self.difficulty: Board.Difficulty = Board.Difficulty(data["difficulty"])
         self.board: list[list[str]] = data["board"]
@@ -124,6 +139,8 @@ class Board:
 
         Rand.set_seed(seed)  # type: ignore
         self.id: str = str(seed)
+        if seed > Board.last_seed:
+            Board.last_seed: int = seed
 
         while True:
             if self.__has_contradiction():

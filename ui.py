@@ -15,7 +15,7 @@ class UI:
         self.header: bool = header
         self.options: list[tuple[str, str]] = options
 
-    def show(self, clr_screen = True):
+    def show(self, clr_screen=True):
         """Prints out this UI interface"""
         text: str = ""
         if self.header:
@@ -34,7 +34,7 @@ class UI:
             if not user_choice in valid_keys:
                 print(f"ERROR: '{user_choice}' is not a valid option!")
                 time.sleep(1)
-                # Sets cursor 3 lines up, then erases to the end of the screen
+                # Sets cursor 2 lines up, then erases to the end of the screen
                 print("\x1b[2F\x1b[0J", end="")
             else:
                 return user_choice
