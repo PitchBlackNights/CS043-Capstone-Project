@@ -19,7 +19,7 @@ class UI:
         """Prints out this UI interface"""
         text: str = ""
         if self.header:
-            text += f"{self.header_text}{"\n" if len(self.options) != 0 else ""}"
+            text += self.header_text + ("\n" if len(self.options) != 0 else "")
         for option_key, option_text in self.options:
             text += f"[{option_key}] {option_text}\n"
 
