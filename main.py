@@ -347,5 +347,6 @@ for board in saved_boards:
     elif board.type == Board.Type.GAME:
         game_boards.append(board)
 
+
 # Start the main menu
 main_menu()

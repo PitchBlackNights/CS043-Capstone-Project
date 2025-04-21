@@ -30,6 +30,18 @@ class Board:
 
             return text
 
+    def __eq__(self, value: object) -> bool:
+        if type(value) != Board:
+            return False
+
+        return (
+            (self.id == value.id)
+            and (self.type == value.type)
+            and (self.difficulty == value.difficulty)
+            and (self.board == value.board)
+            and (self.generated == value.generated)
+        )
+
     def __init__(self) -> None:
         # Initialize the board with default values
         self.id: str = ""
@@ -111,6 +123,8 @@ class Board:
         self,
     ) -> str:
         """Serialize the board data into a JSON string"""
+        if not self.generated:
+            raise Exception("Called `Board.serialize()` on an ungenerated board!")
         data: dict[str, str | int | list[list[str]]] = {
             "id": self.id,
             "type": int(self.type),
