@@ -1,6 +1,9 @@
 import time
 
 
+VERSION: str = "0.1-ALPHA"
+
+
 def clear_screen() -> None:
     """Clear the terminal screen"""
     print("\x1b[2J\x1b[H", end="")
@@ -12,7 +15,7 @@ class UI:
     ):
         # Initialize the UI with a title, header, and options
         self.header_text: str = (
-            f"SUDOKU BOARD GENERATOR  v0.1\n{title}\n============================="
+            f"SUDOKU BOARD GENERATOR  v{VERSION}\n{title}\n============================="
         )
         self.header: bool = header
         self.options: list[tuple[str, str]] = options
