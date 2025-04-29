@@ -161,20 +161,27 @@ class TestBoardTypes(unittest.TestCase):
         self.assertEqual(str(Board.Difficulty.HARD), "Hard")
 
 
+def save_dir_helper() -> str:
+    save_dir: str = os.path.abspath("./test_saved_boards")
+    try:
+        files.delete_path(save_dir)
+    except FileNotFoundError:
+        pass
+    pathlib.Path(save_dir).mkdir(parents=True, exist_ok=False)
+    return save_dir
+
+
 class TestFilesMethods(unittest.TestCase):
     def test_load_saved_boards_empty(self):
-        save_dir: str = os.path.abspath("./test_saved_boards")
+        save_dir: str = save_dir_helper()
+
         saved_boards: list[Board] = files.load_saved_boards(save_dir=save_dir)
         self.assertEqual(saved_boards, [])
+
         files.delete_path(save_dir)
 
     def test_load_saved_boards(self):
-        save_dir: str = os.path.abspath("./test_saved_boards")
-        try:
-            files.delete_path(save_dir)
-        except FileNotFoundError:
-            pass
-        pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
+        save_dir: str = save_dir_helper()
 
         with open(os.path.abspath(f"{save_dir}/0.board"), "x+") as file:
             file.write(
@@ -186,30 +193,23 @@ class TestFilesMethods(unittest.TestCase):
             )
         with open(os.path.abspath(f"{save_dir}/0.txt"), "x+") as file:
             file.write("test")
+
         saved_boards: list[Board] = files.load_saved_boards(save_dir=save_dir)
         self.assertEqual(len(saved_boards), 2)
+
         files.delete_path(save_dir)
 
     def test_save_board_empty(self):
-        save_dir: str = os.path.abspath("./test_saved_boards")
-        try:
-            files.delete_path(save_dir)
-        except FileNotFoundError:
-            pass
-        pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
+        save_dir: str = save_dir_helper()
 
         board: Board = Board()
         with self.assertRaises(Exception):
             files.save_board(board, save_dir=save_dir)
+
         files.delete_path(save_dir)
 
     def test_save_board_filled(self):
-        save_dir: str = os.path.abspath("./test_saved_boards")
-        try:
-            files.delete_path(save_dir)
-        except FileNotFoundError:
-            pass
-        pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
+        save_dir: str = save_dir_helper()
 
         board: Board = Board()
         board.generate(0)
@@ -220,6 +220,70 @@ class TestFilesMethods(unittest.TestCase):
 
         with open(os.path.abspath(f"{save_dir}/0.board"), "r") as file:
             self.assertEqual(file.read(), expect_data)
+
+        files.delete_path(save_dir)
+
+    def test_delete_board_none(self):
+        save_dir: str = save_dir_helper()
+
+        # Doesn't matter if board is generated or saved, cause the "`save_dir` is empty"
+        # check happens before the "is generated" & "is saved" checks
+        board: Board = Board()
+        with self.assertRaises(
+            Exception,
+            msg="Called `files.delete_board()` when there are no boards actively saved!",
+        ):
+            files.delete_board(board, save_dir=save_dir)
+
+        files.delete_path(save_dir)
+
+    def test_delete_board_empty(self):
+        save_dir: str = save_dir_helper()
+
+        tmp_board: Board = Board()
+        tmp_board.generate(100)
+        files.save_board(tmp_board, save_dir=save_dir)
+
+        board: Board = Board()
+        with self.assertRaises(
+            Exception,
+            msg="Called `files.delete_board()` on a board the hasn't been generated!",
+        ):
+            files.delete_board(board, save_dir=save_dir)
+
+        files.delete_path(save_dir)
+
+    def test_delete_board_not_saved(self):
+        save_dir: str = save_dir_helper()
+
+        tmp_board: Board = Board()
+        tmp_board.generate(100)
+        files.save_board(tmp_board, save_dir=save_dir)
+
+        board: Board = Board()
+        board.generate(0)
+        with self.assertRaises(
+            Exception,
+            msg="Called `files.delete_board()` on a board the hasn't been saved!",
+        ):
+            files.delete_board(board, save_dir=save_dir)
+
+        files.delete_path(save_dir)
+
+    def test_delete_board_correct(self):
+        save_dir: str = save_dir_helper()
+
+        tmp_board: Board = Board()
+        tmp_board.generate(100)
+        files.save_board(tmp_board, save_dir=save_dir)
+
+        board: Board = Board()
+        board.generate(0)
+        files.save_board(board, save_dir=save_dir)
+        files.delete_board(board, save_dir=save_dir)
+        if "0.board" in files.get_all_saved_board_files(save_dir=save_dir):
+            self.fail("`files.delete_board()` failed to delete the board!")
+
         files.delete_path(save_dir)
 
 
