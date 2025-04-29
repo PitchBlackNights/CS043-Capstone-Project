@@ -177,7 +177,7 @@ class Board:
                         coords.append((x, y))
 
             # Select random cell out of the cells with the lowest entropy
-            # Coords is guaranteed to be populated because the board is not currently solved
+            # `coords` is guaranteed to be populated because the board is not solved
             selected_cell_index: int = Rand.random() % len(coords)  # type: ignore
             x, y = coords[selected_cell_index]
 
@@ -185,7 +185,7 @@ class Board:
             self.__board[y][x].collapse()
             value = self.__board[y][x].get_value()
 
-            # Propogate cell information
+            # Propagate cell information
 
             # Update row and column choices
             for index in range(9):

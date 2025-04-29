@@ -14,10 +14,10 @@ class UI:
         self, title: str = "", header: bool = True, options: list[tuple[str, str]] = []
     ):
         # Initialize the UI with a title, header, and options
-        self.header_text: str = (
-            f"SUDOKU BOARD GENERATOR  v{VERSION}\n{title}\n"
+        self.header_text: str = f"SUDOKU BOARD GENERATOR  v{VERSION}\n{title}\n"
+        self.header_text += "=" * (
+            max(len(f"SUDOKU BOARD GENERATOR  v{VERSION}"), len(title)) + 1
         )
-        self.header_text += "=" * (max(len(f"SUDOKU BOARD GENERATOR  v{VERSION}"), len(title)) + 1)
 
         self.header: bool = header
         self.options: list[tuple[str, str]] = options

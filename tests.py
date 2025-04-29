@@ -85,7 +85,7 @@ class TestBoardMethods(unittest.TestCase):
 
         self.assertEqual(differences, 28)
 
-    def test_gamify_easy(self):
+    def test_gameify_easy(self):
         board: Board = Board()
         board.generate(0)
         board1: list[list[str]] = deepcopy(board.board)
@@ -101,7 +101,7 @@ class TestBoardMethods(unittest.TestCase):
 
         self.assertEqual(differences, 28)
 
-    def test_gamify_medium(self):
+    def test_gameify_medium(self):
         board: Board = Board()
         board.generate(0)
         board1: list[list[str]] = deepcopy(board.board)
@@ -117,7 +117,7 @@ class TestBoardMethods(unittest.TestCase):
 
         self.assertEqual(differences, 37)
 
-    def test_gamify_hard(self):
+    def test_gameify_hard(self):
         board: Board = Board()
         board.generate(0)
         board1: list[list[str]] = deepcopy(board.board)

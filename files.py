@@ -39,8 +39,8 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     with open(file_path, "w+") as file:
         file.write(board.serialize())
 
-    # Sleep for just a bit to avoid and potential weird behavoir on systems with slow discs
-    time.sleep(0.100)  # 0.100 Seconds == 100 Miliseconds
+    # Sleep for just a bit to avoid and potential weird behavior on slow systems
+    time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds
 
 
 def get_all_saved_board_files(save_dir: str = save_dir) -> list[str]:
@@ -134,8 +134,8 @@ def delete_board(board: Board, save_dir: str = save_dir) -> None:
             "Called `files.delete_board()` on a board the hasn't been saved!"
         )
 
-    # Required checks have passed, so go ahead and delete the file (Which must exist now)
+    # Required checks have passed, go ahead and delete the file (Which must exist now)
     delete_path(f"{save_dir}/{board.id}.board")
 
-    # Sleep for just a bit to avoid and potential weird behavoir on systems with slow discs
-    time.sleep(0.100)  # 0.100 Seconds == 100 Miliseconds
+    # Sleep for just a bit to avoid and potential weird behavior on slow systems
+    time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds

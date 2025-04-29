@@ -234,7 +234,7 @@ def view_boards__filled_boards() -> None:
 
     while True:
         pages: int = math.ceil(len(filled_boards) / boards_per_page)
-        # Limit the range of `board_page` (0 <= X <= `pages`) to avoid undefined behavior
+        # Limit the range of `board_page` to avoid undefined behavior
         board_page: int = clamp_int(0, board_page, pages)
 
         ui_options: list[tuple[str, str]] = []
@@ -246,7 +246,7 @@ def view_boards__filled_boards() -> None:
         # Populate UI options with this page's boards
         for index in page_range:
             ui_options.append((str(index + 1), f"Board #{filled_boards[index].id}"))
-        # Append a newline to the last option. This separates them from the menu screen controls
+        # Append a newline to the last option. Separates menu options from controls
         ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
 
         if board_page != 0:
@@ -290,7 +290,7 @@ def view_boards__game_boards() -> None:
 
     while True:
         pages: int = math.ceil(len(filled_boards) / boards_per_page)
-        # Limit the range of `board_page` (0 <= X <= `pages`) to avoid undefined behavior
+        # Limit the range of `board_page` to avoid undefined behavior
         board_page: int = clamp_int(0, board_page, pages)
 
         ui_options: list[tuple[str, str]] = []
@@ -307,7 +307,7 @@ def view_boards__game_boards() -> None:
                     f"Board #{game_boards[index].id} (DIFF: {game_boards[index].difficulty})",
                 )
             )
-        # Append a newline to the last option. This separates them from the menu screen controls
+        # Append a newline to the last option. Separates menu options from controls
         ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
 
         if board_page != 0:
@@ -390,6 +390,7 @@ def __main() -> None:
     main_menu()
 
 
-# Good practice to prevent code from running when imported... for whatever reason this was imported
+# Good practice to prevent code from running when imported...
+# ...for whatever reason this might've been imported.
 if __name__ == "__main__":
     __main()
