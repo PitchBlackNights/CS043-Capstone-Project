@@ -1,5 +1,5 @@
 from board import Board
-import os, pathlib, shutil
+import os, pathlib, shutil, time
 from copy import deepcopy
 
 # Directory to save boards
@@ -38,6 +38,9 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     # Write serialized board data to save file
     with open(file_path, "w+") as file:
         file.write(board.serialize())
+
+    # Sleep for just a bit to avoid and potential weird behavoir on systems with slow discs
+    time.sleep(0.100)  # 0.100 Seconds == 100 Miliseconds
 
 
 def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
