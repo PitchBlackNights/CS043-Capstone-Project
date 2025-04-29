@@ -1,7 +1,7 @@
 import time
 
 
-VERSION: str = "0.1-ALPHA"
+VERSION: str = "0.2-BETA"
 
 
 def clear_screen() -> None:
