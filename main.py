@@ -372,6 +372,8 @@ def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
 
     # SHOW BOARD UI OPTIONS: Delete
     elif user_choice == "D":
+        files.delete_board(board)
+
         # Update the saved boards lists to avoid undefined behavior
         update_board_lists()
 

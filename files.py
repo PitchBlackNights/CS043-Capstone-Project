@@ -43,8 +43,17 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     time.sleep(0.100)  # 0.100 Seconds == 100 Miliseconds
 
 
-def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
-    """Load all saved boards from disk"""
+def get_all_saved_board_files(save_dir: str = save_dir) -> list[str]:
+    """Returns a list of all *NAME* valid board saves, sorted by numerical value"""
+    # =====================
+    #     POTENTIAL BUG
+    # =====================
+    # A potential bug arises from the fact that all *NAME* valid board saves
+    # may not be *DATA* valid.
+    #
+    # This means that corruptions withing a save file's data may cause bugs, or
+    # otherwise undefined behavior, when deserializing the data.
+
     # Make sure the save directory actually exists
     pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
 
@@ -78,6 +87,17 @@ def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
             if int(filenames[i][:-6]) > int(filenames[j][:-6]):
                 filenames[i], filenames[j] = filenames[j], filenames[i]
 
+    return filenames
+
+
+def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
+    """Load all saved boards from disk"""
+    # Make sure the save directory actually exists
+    pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
+
+    # Get list of all saved board files within `save_dir`
+    filenames: list[str] = get_all_saved_board_files(save_dir=save_dir)
+
     # Loop `filenames` and initialize + deserialize each save file
     boards: list[Board] = []
     for filename in filenames:
@@ -87,3 +107,35 @@ def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
             boards.append(tmp_board)
 
     return boards
+
+
+def delete_board(board: Board, save_dir: str = save_dir) -> None:
+    # Make sure the save directory actually exists
+    pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
+
+    # Get list of all saved board files within `save_dir`
+    filenames: list[str] = get_all_saved_board_files(save_dir=save_dir)
+
+    # There are no saved boards, so raise an error.
+    if len(filenames) == 0:
+        raise Exception(
+            "Called `files.delete_board()` when there are no boards actively saved!"
+        )
+
+    # The provided board hasn't been generated, so raise an error.
+    if not board.generated:
+        raise Exception(
+            "Called `files.delete_board()` on a board the hasn't been generated!"
+        )
+
+    # The provided board hasn't been saved, so raise an error.
+    if not f"{board.id}.board" in filenames:
+        raise Exception(
+            "Called `files.delete_board()` on a board the hasn't been saved!"
+        )
+
+    # Required checks have passed, so go ahead and delete the file (Which must exist now)
+    delete_path(f"{save_dir}/{board.id}.board")
+
+    # Sleep for just a bit to avoid and potential weird behavoir on systems with slow discs
+    time.sleep(0.100)  # 0.100 Seconds == 100 Miliseconds
