@@ -7,20 +7,22 @@ import random
 
 
 class Board:
-    last_seed: int = 0 # Tracks the last seed used for board generation
+    last_seed: int = 0  # Tracks the last seed used for board generation
 
     class Type(IntEnum):
         """Enum for board types."""
-        NONE = 0 # No type assigned
-        FULL = 1 # Fully filled board
-        GAME = 2 # Game board with some cells removed
+
+        NONE = 0  # No type assigned
+        FULL = 1  # Fully filled board
+        GAME = 2  # Game board with some cells removed
 
     class Difficulty(IntEnum):
         """Enum for difficulty levels."""
-        NONE = 0   # No difficulty assigned
-        EASY = 1   # Easy difficulty
-        MEDIUM = 2 # Medium difficulty
-        HARD = 3   # Hard difficulty
+
+        NONE = 0  # No difficulty assigned
+        EASY = 1  # Easy difficulty
+        MEDIUM = 2  # Medium difficulty
+        HARD = 3  # Hard difficulty
 
         def __str__(self) -> str:
             """Returns the string representation of the difficulty."""
@@ -54,15 +56,21 @@ class Board:
         self.type: Board.Type = Board.Type.NONE  # Board type
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE  # Difficulty level
         # CORE CONCEPT: Instance of a 2D list
-        self.board: list[list[str]] = [[" " for _ in range(9)] for _ in range(9)]  # Public board representation
+        self.board: list[list[str]] = [
+            [" " for _ in range(9)] for _ in range(9)
+        ]  # Public board representation
         # CORE CONCEPT: Instance of a hidden attribute
-        self.__board: list[list[Cell]] = [[Cell() for _ in range(9)] for _ in range(9)]  # Internal board representation
+        self.__board: list[list[Cell]] = [
+            [Cell() for _ in range(9)] for _ in range(9)
+        ]  # Internal board representation
         self.generated: bool = False  # Flag indicating if the board has been generated
 
     def gameify(self, difficulty: Difficulty) -> None:
         """Convert a full board into a game board by removing cells."""
         if not self.generated:
-            raise BoardException("Called `Board.gameify()` on an ungenerated board!")  # Ensure the board is generated
+            raise BoardException(
+                "Called `Board.gameify()` on an ungenerated board!"
+            )  # Ensure the board is generated
 
         if not self.difficulty == Board.Difficulty.NONE:
             raise BoardException(
@@ -86,7 +94,9 @@ class Board:
             for x in range(len(self.board[y])):
                 # CORE CONCEPT: Instance of a `tuple` or `list` with methods used on them
                 cells.append((x, y))
-        removed_cells: list[tuple[int, int]] = random.sample(cells, num_to_remove)  # Randomly select cells to remove
+        removed_cells: list[tuple[int, int]] = random.sample(
+            cells, num_to_remove
+        )  # Randomly select cells to remove
 
         # Remove the selected cells from the board
         for x, y in removed_cells:
@@ -107,10 +117,14 @@ class Board:
             for inner_row in range(3):  # Iterate over rows within each block
                 for table_column in range(3):  # Iterate over columns within each block
                     text += f"{sep} "
-                    for inner_column in range(3):  # Iterate over cells within each block
+                    for inner_column in range(
+                        3
+                    ):  # Iterate over cells within each block
                         text += f"{self.board[(table_row * 3) + inner_row][(table_column * 3) + inner_column]} "
                 text += f"{sep}\n"
-            if table_row != 2:  # Add a separator between blocks, except after the last block
+            if (
+                table_row != 2
+            ):  # Add a separator between blocks, except after the last block
                 text += f"{mid}\n"
         text += f"{foot}"  # Add the table footer
 
@@ -127,7 +141,9 @@ class Board:
         # Set the random seed for board generation
         Rand.set_seed(seed)  # type: ignore
         self.id: str = str(seed)  # Assign the seed as the board's unique ID
-        if seed > Board.last_seed:  # Update the last seed if the current seed is greater
+        if (
+            seed > Board.last_seed
+        ):  # Update the last seed if the current seed is greater
             Board.last_seed: int = seed
 
         while True:
