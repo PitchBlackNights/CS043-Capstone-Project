@@ -245,7 +245,7 @@ def view_boards__filled_boards() -> None:
 
         # Checks if there are any Filled Boards to show.
         # If there aren't any, skip the unnecessary code
-        if len(game_boards) != 0:
+        if len(filled_boards) != 0:
             # Populate UI options with this page's boards
             for index in page_range:
                 ui_options.append((str(index + 1), f"Board #{filled_boards[index].id}"))
