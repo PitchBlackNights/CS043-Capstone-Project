@@ -3,7 +3,7 @@ from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
 from errors import BoardException
-import random, json
+import random
 
 
 class Board:
@@ -51,20 +51,6 @@ class Board:
         self.board: list[list[str]] = [[" " for _ in range(9)] for _ in range(9)]
         self.__board: list[list[Cell]] = [[Cell() for _ in range(9)] for _ in range(9)]
         self.generated: bool = False
-
-        # Populate `self.board` with a 2D list with 9x9 dimensions
-        # row_norm: list[str] =
-        # for _ in range(9):
-        #     row_norm.append(" ")
-        # for _ in range(9):
-        #     self.board.append(deepcopy(row_norm))
-
-        # Populate `self.__board` with a 2D list with 9x9 dimensions
-        # row_hide: list[Cell] = []
-        # for _ in range(9):
-        #     row_hide.append(Cell())
-        # for _ in range(9):
-        #     self.__board.append(deepcopy(row_hide))
 
     def gameify(self, difficulty: Difficulty) -> None:
         """Convert a full board into a game board by removing cells"""
@@ -121,34 +107,6 @@ class Board:
         text += f"{foot}"
 
         return text
-
-    def serialize(
-        self,
-    ) -> str:
-        """Serialize the board data into a JSON string"""
-        if not self.generated:
-            raise BoardException("Called `Board.serialize()` on an ungenerated board!")
-        data: dict[str, str | int | list[list[str]]] = {
-            "id": self.id,
-            "type": int(self.type),
-            "difficulty": int(self.difficulty),
-            "board": self.board,
-        }
-        return json.dumps(data)
-
-    def deserialize(
-        self,
-        data_str: str,
-    ) -> None:
-        """Deserialize the board data from a JSON string"""
-        data = json.loads(data_str)
-        self.id: str = data["id"]
-        if int(data["id"]) > Board.last_seed:
-            Board.last_seed: int = int(data["id"])
-        self.type: Board.Type = Board.Type(data["type"])
-        self.difficulty: Board.Difficulty = Board.Difficulty(data["difficulty"])
-        self.board: list[list[str]] = data["board"]
-        self.generated: bool = True
 
     def generate(self, seed: int) -> None:
         """Generate a board with the provided seed"""

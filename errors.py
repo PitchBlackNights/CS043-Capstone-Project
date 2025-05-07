@@ -14,3 +14,9 @@ class CellException(Exception):
     """Fatal Cell Exception"""
 
     pass
+
+
+class DeserializerException(Exception):
+    """Non-Fatal Deserializer Exception"""
+
+    pass

@@ -1,7 +1,7 @@
 from board import Board
-import os, pathlib, shutil, time
+import os, pathlib, shutil, time, serde
 from copy import deepcopy
-from errors import FileException
+from errors import FileException, DeserializerException
 
 # Directory to save boards
 save_dir: str = os.path.abspath("./saved_boards")
@@ -18,6 +18,8 @@ def delete_path(file_path: str):
         os.remove(abs_file_path)
     else:
         shutil.rmtree(abs_file_path)
+    # Sleep for just a bit to avoid and potential weird behavior on slow systems
+    time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds
 
 
 def save_board(board: Board, save_dir: str = save_dir) -> None:
@@ -41,7 +43,7 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
 
     # Write serialized board data to save file
     with open(file_path, "w+") as file:
-        file.write(board.serialize())
+        file.write(serde.serialize(board))
 
     # Sleep for just a bit to avoid and potential weird behavior on slow systems
     time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds
@@ -51,14 +53,6 @@ def get_all_saved_board_files(
     save_dir: str = save_dir, abs_path: bool = False
 ) -> list[str]:
     """Returns a list of all *NAME* valid board saves, sorted by numerical value"""
-    # =====================
-    #     POTENTIAL BUG
-    # =====================
-    # A potential bug arises from the fact that all *NAME* valid board saves
-    # may not be *DATA* valid.
-    #
-    # This means that corruptions with a save file's data may cause bugs, or
-    # otherwise undefined behavior, when deserializing the data.
 
     # Make sure the save directory actually exists
     pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
@@ -114,10 +108,20 @@ def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
     # Loop `filenames` and initialize + deserialize each save file
     boards: list[Board] = []
     for filename in filenames:
+        delete_board: bool = False
         with open(f"{save_dir}/{filename}", "r") as file:
-            tmp_board: Board = Board()
-            tmp_board.deserialize(file.read())
-            boards.append(tmp_board)
+            try:
+                tmp_board: Board = serde.deserialize(file.read())
+                boards.append(tmp_board)
+            except DeserializerException as err:
+                print(f"ERROR: A board save file is corrupted! ('{filename}')\nPROBLEMS:")
+                print(f"\t{'\t'.join(f'{line}\n' for line in str(err).splitlines())}")
+                input("Press enter to continue...")
+                print("Deleting the board save...\n")
+                time.sleep(2)
+                delete_board: bool = True
+        if delete_board:
+            delete_path(f"{save_dir}/{filename}")
 
     return boards
 
@@ -147,6 +151,3 @@ def delete_board(board: Board, save_dir: str = save_dir) -> None:
 
     # Required checks have passed, go ahead and delete the file (Which must exist now)
     delete_path(f"{save_dir}/{board.id}.board")
-
-    # Sleep for just a bit to avoid and potential weird behavior on slow systems
-    time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds

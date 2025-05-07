@@ -64,19 +64,21 @@ class TestBoardMethods(unittest.TestCase):
     def test_serialize_empty(self):
         from board import Board
         from errors import BoardException
+        import serde
 
         board: Board = Board()
 
         with self.assertRaises(BoardException):
-            _: str = board.serialize()
+            _: str = serde.serialize(board)
 
     def test_serialize_filled(self):
         from board import Board
+        import serde
 
         board: Board = Board()
         board.generate(0)
 
-        serial: str = board.serialize()
+        serial: str = serde.serialize(board)
         expect_serial: str = (
             '{"id": "0", "type": 1, "difficulty": 0, "board": [["1", "3", "4", "6", "8", "2", "9", "5", "7"], ["2", "8", "7", "9", "5", "1", "6", "4", "3"], ["9", "6", "5", "7", "4", "3", "8", "1", "2"], ["5", "7", "2", "4", "1", "6", "3", "9", "8"], ["6", "4", "8", "3", "2", "9", "1", "7", "5"], ["3", "9", "1", "5", "7", "8", "4", "2", "6"], ["8", "1", "6", "2", "9", "7", "5", "3", "4"], ["7", "5", "3", "1", "6", "4", "2", "8", "9"], ["4", "2", "9", "8", "3", "5", "7", "6", "1"]]}'
         )
@@ -85,13 +87,14 @@ class TestBoardMethods(unittest.TestCase):
 
     def test_serialize_game(self):
         from board import Board
+        import serde
 
         board: Board = Board()
         board.generate(0)
 
-        serial1: str = board.serialize()
+        serial1: str = serde.serialize(board)
         board.gameify(Board.Difficulty.EASY)
-        serial2: str = board.serialize()
+        serial2: str = serde.serialize(board)
 
         self.assertNotEqual(serial1, serial2)
 
@@ -101,26 +104,26 @@ class TestBoardMethods(unittest.TestCase):
     # ==================================================================================
     def test_deserialize_filled(self):
         from board import Board
+        import serde
 
         board: Board = Board()
         board.generate(0)
 
-        serial: str = board.serialize()
-        deserial: Board = Board()
-        deserial.deserialize(serial)
+        serial: str = serde.serialize(board)
+        deserial: Board = serde.deserialize(serial)
 
         self.assertEqual(board, deserial)
 
     def test_deserialize_game(self):
         from board import Board
+        import serde
 
         board: Board = Board()
         board.generate(0)
         board.gameify(Board.Difficulty.EASY)
 
-        serial: str = board.serialize()
-        deserial: Board = Board()
-        deserial.deserialize(serial)
+        serial: str = serde.serialize(board)
+        deserial: Board = serde.deserialize(serial)
 
         self.assertEqual(board, deserial)
 
