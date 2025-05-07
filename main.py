@@ -6,7 +6,8 @@
 #
 # It makes use of a Wave Function Collapse algorithm to
 # quickly, and accurately, generate valid Sudoku boards.
-
+#
+# THIS PROGRAM IS ONLY COMPATIBLE WITH PYTHON 3.12+ ON PURPOSE
 
 # ======================================================================================
 # CORE CONCEPTS
