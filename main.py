@@ -102,7 +102,7 @@ def generate_boards() -> None:
 
 def generate_boards__filled_boards() -> None:
     """Menu for generating filled boards"""
-    num_to_gen: int = tools.get_int("Number of boards to generate: ")
+    num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
     for cycle in range(num_to_gen):
         board = Board()
         board.generate(Board.last_seed + 1)
@@ -144,7 +144,7 @@ def generate_boards__filled_boards() -> None:
 
 def generate_boards__game_boards() -> None:
     """Menu for generating game boards"""
-    num_to_gen: int = tools.get_int("Number of boards to generate: ")
+    num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
     print("\nWhat difficulty level?")
     options_ui: UI = UI(
         header=False,
