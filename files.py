@@ -31,6 +31,7 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     if not board.generated:
         raise FileException("Called `files.save_board()` on an ungenerated board!")
 
+    # CORE CONCEPT: Instance of Try and Except
     # Create the save file, and prompt user if it already exists
     try:
         open(file_path, "x").close()
@@ -119,7 +120,8 @@ def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
             try:
                 delete_path(f"{save_dir}/{filename}")
             except Exception as e:
-                print(f"ERROR: Failed to delete corrupted file '{filename}': {e}")
+                print(f"ERROR: Failed to delete the corrupted save '{filename}': {e}")
+                input("Press enter to continue...")
 
     return boards
 

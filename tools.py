@@ -9,10 +9,10 @@ def clamp_int(min_num: int, num: int, max_num: int) -> int:
 def get_int(text: str) -> int:
     """Gets an valid integer from the user"""
     while True:
-        try:
-            user_int: int = int(input(text))
-            return user_int
-        except ValueError:
+        user_int: str = input(text)
+        if user_int.isdigit():
+            return int(user_int)
+        else:
             print("That's not a number!")
             time.sleep(1)
             # Sets cursor 2 lines up, then erases to the end of the screen

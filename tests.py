@@ -112,6 +112,9 @@ class TestBoardMethods(unittest.TestCase):
         serial: str = serde.serialize(board)
         deserial: Board = serde.deserialize(serial)
 
+        # CORE CONCEPT: Instance of comparing the equivalence of two items
+        # Explanation: Behind the scenes, self.assertEqual() just runs a normal
+        # equivalence check. In this scenario, it's comparing to Board types together.
         self.assertEqual(board, deserial)
 
     def test_deserialize_game(self):
@@ -236,9 +239,7 @@ class TestBoardMethods(unittest.TestCase):
             board.generate(seed)
             for y in range(len(board.board)):
                 for x in range(len(board.board[y])):
-                    try:
-                        _: int = int(board.board[y][x])
-                    except ValueError:
+                    if board.board[y][x].isdigit():
                         self.fail(
                             f"`Board.generate()` generated a non-integer value:\n    Val: '{board.board[y][x]}' ({x}, {y})\n    Seed: {seed}"
                         )

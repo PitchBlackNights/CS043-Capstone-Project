@@ -53,7 +53,9 @@ class Board:
         self.id: str = ""  # Unique identifier for the board
         self.type: Board.Type = Board.Type.NONE  # Board type
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE  # Difficulty level
+        # CORE CONCEPT: Instance of a 2D list
         self.board: list[list[str]] = [[" " for _ in range(9)] for _ in range(9)]  # Public board representation
+        # CORE CONCEPT: Instance of a hidden attribute
         self.__board: list[list[Cell]] = [[Cell() for _ in range(9)] for _ in range(9)]  # Internal board representation
         self.generated: bool = False  # Flag indicating if the board has been generated
 
@@ -82,6 +84,7 @@ class Board:
         cells: list[tuple[int, int]] = []
         for y in range(len(self.board)):
             for x in range(len(self.board[y])):
+                # CORE CONCEPT: Instance of a `tuple` or `list` with methods used on them
                 cells.append((x, y))
         removed_cells: list[tuple[int, int]] = random.sample(cells, num_to_remove)  # Randomly select cells to remove
 
@@ -145,11 +148,13 @@ class Board:
             for y in range(len(self.__board)):
                 for x in range(len(self.__board[y])):
                     if self.__board[y][x].get_entropy() == lowest_entropy:
+                        # CORE CONCEPT: Instance of packing
                         coords.append((x, y))
 
             # Randomly select one of the cells with the lowest entropy
             # `coords` is guaranteed to be populated because the board is not solved
             selected_cell_index: int = Rand.random() % len(coords)  # type: ignore
+            # CORE CONCEPT: Instance of unpacking
             x, y = coords[selected_cell_index]
 
             # Collapse the selected cell to a single value

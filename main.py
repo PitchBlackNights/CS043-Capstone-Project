@@ -1,8 +1,28 @@
+# ======================================================================================
+# PROJECT DESCRIPTION
+# ======================================================================================
 # This is a Sudoku board generator that can generate filled
 # boards and starting boards at 3 different levels.
 #
 # It makes use of a Wave Function Collapse algorithm to
 # quickly, and accurately, generate valid Sudoku boards.
+
+
+# ======================================================================================
+# CORE CONCEPTS
+# ======================================================================================
+# Core concept comments are prefixed with `CORE CONCEPT:`
+#
+# - Instance of a function with parameters    (main.py:423:1)
+# - Instance of Try and Except    (files.py:36:5)
+# - Instance of the `in` keyword    (ui.py:44:13)
+# - Instance of a `tuple` or `list` with methods used on them    (board.py:86:17)
+# - Instance of a 2D list    (board.py:57:9)
+# - Instance of packing    (board.py:151:25)
+# - Instance of unpacking    (board.py:156:13)
+# - Instance of a dictionary    (serde.py:115:5)
+# - Instance of comparing the equivalence of two items    (tests.py:118:9)
+# - Instance of a hidden attribute    (board.py:59:9)
 
 
 from board import Board
@@ -172,7 +192,9 @@ def generate_boards__game_boards() -> None:
     for cycle in range(num_to_gen):
         board = Board()  # Create a new board instance
         board.generate(Board.last_seed + 1)  # Generate a filled board with a new seed
-        board.gameify(user_difficulty)  # Convert the board into a game board with the chosen difficulty
+        board.gameify(
+            user_difficulty
+        )  # Convert the board into a game board with the chosen difficulty
 
         # Display the progress of board generation
         show_board_ui: UI = UI(
@@ -256,9 +278,7 @@ def view_boards__filled_boards() -> None:
             1, math.ceil(len(filled_boards) / boards_per_page)
         )  # Ensure at least 1 page
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = tools.clamp_int(
-            0, board_page, pages - 1
-        )
+        board_page: int = tools.clamp_int(0, board_page, pages - 1)
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(filled_boards)),
@@ -331,9 +351,7 @@ def view_boards__game_boards() -> None:
             1, math.ceil(len(game_boards) / boards_per_page)
         )  # Ensure at least 1 page
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = tools.clamp_int(
-            0, board_page, pages - 1
-        )
+        board_page: int = tools.clamp_int(0, board_page, pages - 1)
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(game_boards)),
@@ -401,6 +419,7 @@ def view_boards__game_boards() -> None:
             )
 
 
+# CORE CONCEPT: Instance of a function with parameters
 def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
     """Displays a single board with options to delete or go back."""
     # Display the board details, including difficulty if applicable
@@ -430,7 +449,7 @@ def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
 
     # SHOW BOARD UI OPTIONS: Delete
     elif user_choice == "D":
-        files.delete_board(board) # Delete the board from storage
+        files.delete_board(board)  # Delete the board from storage
 
         # Update the saved boards lists to reflect the deletion
         update_board_lists()

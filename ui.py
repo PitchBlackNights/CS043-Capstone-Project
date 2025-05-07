@@ -39,6 +39,8 @@ class UI:
         valid_keys: list[str] = [key for key, _ in self.options]  # Extract valid keys
         while True:
             user_choice: str = input("Option: ")  # Prompt the user for input
+
+            # CORE CONCEPT: Instance of the `in` keyword
             if not user_choice in valid_keys:  # Check if the input is invalid
                 print(f"ERROR: '{user_choice}' is not a valid option!")  # Show error
                 time.sleep(2)  # Pause briefly to let the user read the error

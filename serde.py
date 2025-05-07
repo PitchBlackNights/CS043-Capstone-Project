@@ -110,6 +110,7 @@ def serialize(board: Board) -> str:
     if not board.generated:
         raise BoardException("Called `Board.serialize()` on an ungenerated board!")
 
+    # CORE CONCEPT: Instance of a dictionary
     # Create a dictionary representation of the board
     data: dict[str, str | int | list[list[str]]] = {
         "id": board.id,  # Board's unique ID
