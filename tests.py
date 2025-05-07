@@ -239,7 +239,7 @@ class TestBoardMethods(unittest.TestCase):
             board.generate(seed)
             for y in range(len(board.board)):
                 for x in range(len(board.board[y])):
-                    if board.board[y][x].isdigit():
+                    if not board.board[y][x].isdigit():
                         self.fail(
                             f"`Board.generate()` generated a non-integer value:\n    Val: '{board.board[y][x]}' ({x}, {y})\n    Seed: {seed}"
                         )
