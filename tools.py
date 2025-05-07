@@ -2,12 +2,12 @@ import time
 
 
 def clamp_int(min_num: int, num: int, max_num: int) -> int:
-    """Limits the range of `num` to between `min_num` and `max_num`"""
+    """Limits the range of `num` to between `min_num` and `max_num` (Inclusive)"""
     return max(min(max_num, num), min_num)
 
 
 def get_int(text: str) -> int:
-    """Gets an integer from the user"""
+    """Gets an valid integer from the user"""
     while True:
         try:
             user_int: int = int(input(text))

@@ -125,7 +125,7 @@ def delete_board(board: Board, save_dir: str = save_dir) -> None:
     # The provided board hasn't been generated, so raise an error.
     if not board.generated:
         raise Exception(
-            "Called `files.delete_board()` on a board the hasn't been generated!"
+            "Called `files.delete_board()` on an ungenerated board!"
         )
 
     # The provided board hasn't been saved, so raise an error.

@@ -5,7 +5,7 @@ VERSION: str = "0.2-BETA"
 
 
 def clear_screen() -> None:
-    """Clear the terminal screen"""
+    """Clears the terminal screen"""
     print("\x1b[2J\x1b[H", end="")
 
 

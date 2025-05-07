@@ -2,7 +2,9 @@ import random, sys
 
 
 class Rand:
-    # Static class for managing random number generation with a seed
+    # A static class for managing random number generation with a seed.
+    # This allows for deterministic RNG values throughout the whole project,
+    # though it's currently only use for board generation.
     seed: int = 0
     local_random: random.Random = random.Random(seed)
 
