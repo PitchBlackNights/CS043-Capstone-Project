@@ -7,11 +7,10 @@
 
 from board import Board
 from ui import UI
-from tools import get_int, clamp_int
-import files, math, time
+import files, tools, math, time
 
 
-# files.delete_path(files.save_dir)
+# tools.clear_all_saved_boards()
 # for cycle in range(0, 31):
 #     tmp_board = Board()
 #     tmp_board.generate(cycle)
@@ -21,6 +20,7 @@ import files, math, time
 #     tmp_board.generate(cycle)
 #     tmp_board.gameify(Board.Difficulty.MEDIUM)
 #     files.save_board(tmp_board)
+# input("DONE")
 
 
 # Load saved boards into separate lists for filled and game boards
@@ -102,7 +102,7 @@ def generate_boards() -> None:
 
 def generate_boards__filled_boards() -> None:
     """Menu for generating filled boards"""
-    num_to_gen: int = get_int("Number of boards to generate: ")
+    num_to_gen: int = tools.get_int("Number of boards to generate: ")
     for cycle in range(num_to_gen):
         board = Board()
         board.generate(Board.last_seed + 1)
@@ -144,7 +144,7 @@ def generate_boards__filled_boards() -> None:
 
 def generate_boards__game_boards() -> None:
     """Menu for generating game boards"""
-    num_to_gen: int = get_int("Number of boards to generate: ")
+    num_to_gen: int = tools.get_int("Number of boards to generate: ")
     print("\nWhat difficulty level?")
     options_ui: UI = UI(
         header=False,
@@ -235,33 +235,45 @@ def view_boards__filled_boards() -> None:
     while True:
         pages: int = math.ceil(len(filled_boards) / boards_per_page)
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = clamp_int(0, board_page, pages)
-
-        ui_options: list[tuple[str, str]] = []
+        board_page: int = tools.clamp_int(0, board_page, pages)
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(filled_boards)),
         )
 
-        # Populate UI options with this page's boards
-        for index in page_range:
-            ui_options.append((str(index + 1), f"Board #{filled_boards[index].id}"))
-        # Append a newline to the last option. Separates menu options from controls
-        ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
+        ui_options: list[tuple[str, str]] = []
 
-        if board_page != 0:
-            ui_options.append(("-", "Prev. Page"))
-        if board_page != pages - 1:
-            ui_options.append(("+", "Next Page"))
+        # Checks if there are any Filled Boards to show.
+        # If there aren't any, skip the unnecessary code
+        if len(game_boards) != 0:
+            # Populate UI options with this page's boards
+            for index in page_range:
+                ui_options.append((str(index + 1), f"Board #{filled_boards[index].id}"))
+            if len(filled_boards) != 0:
+                # Append a newline to the last option. Separates menu options from controls
+                ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
+
+            if board_page != 0:
+                ui_options.append(("-", "Prev. Page"))
+            if board_page != pages - 1:
+                ui_options.append(("+", "Next Page"))
         ui_options.append(("B", "Back"))
         ui_options.append(("X", "Exit"))
 
         filled_boards_ui: UI = UI(
-            title=f"View Filled Boards ({board_page + 1}/{max(pages, 1)})",
+            title=f"Viewing Filled Boards ({board_page + 1}/{max(pages, 1)})",
+        )
+        filled_boards_ui_options: UI = UI(
+            header=False,
             options=ui_options,
         )
+
         filled_boards_ui.show()
-        user_choice: str = filled_boards_ui.get_choice()
+        if len(filled_boards) == 0:
+            print("There are no saved Filled Boards to view!\n")
+        filled_boards_ui_options.show(clr_screen=False)
+
+        user_choice = filled_boards_ui_options.get_choice()
 
         # VIEW FILLED BOARDS: Exit
         if user_choice == "X":
@@ -289,40 +301,52 @@ def view_boards__game_boards() -> None:
     board_page: int = 0
 
     while True:
-        pages: int = math.ceil(len(filled_boards) / boards_per_page)
+        pages: int = math.ceil(len(game_boards) / boards_per_page)
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = clamp_int(0, board_page, pages)
-
-        ui_options: list[tuple[str, str]] = []
+        board_page: int = tools.clamp_int(0, board_page, pages)
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(game_boards)),
         )
 
-        # Populate UI options with this page's boards
-        for index in page_range:
-            ui_options.append(
-                (
-                    str(index + 1),
-                    f"Board #{game_boards[index].id} (DIFF: {game_boards[index].difficulty})",
-                )
-            )
-        # Append a newline to the last option. Separates menu options from controls
-        ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
+        ui_options: list[tuple[str, str]] = []
 
-        if board_page != 0:
-            ui_options.append(("-", "Prev. Page"))
-        if board_page != pages - 1:
-            ui_options.append(("+", "Next Page"))
+        # Checks if there are any Game Boards to show.
+        # If there aren't any, skip the unnecessary code
+        if len(game_boards) != 0:
+            # Populate UI options with this page's boards
+            for index in page_range:
+                ui_options.append(
+                    (
+                        str(index + 1),
+                        f"Board #{game_boards[index].id} (DIFF: {game_boards[index].difficulty})",
+                    )
+                )
+
+            # Append a newline to the last option. Separates menu options from controls
+            ui_options[-1] = (ui_options[-1][0], ui_options[-1][1] + "\n")
+
+            if board_page != 0:
+                ui_options.append(("-", "Prev. Page"))
+            if board_page != pages - 1:
+                ui_options.append(("+", "Next Page"))
         ui_options.append(("B", "Back"))
         ui_options.append(("X", "Exit"))
 
         game_boards_ui: UI = UI(
-            title=f"View Game Boards ({board_page + 1}/{max(pages, 1)})",
+            title=f"Viewing Game Boards ({board_page + 1}/{max(pages, 1)})",
+        )
+        game_boards_ui_options: UI = UI(
+            header=False,
             options=ui_options,
         )
+
         game_boards_ui.show()
-        user_choice = game_boards_ui.get_choice()
+        if len(game_boards) == 0:
+            print("There are no saved Game Boards to view!\n")
+        game_boards_ui_options.show(clr_screen=False)
+
+        user_choice = game_boards_ui_options.get_choice()
 
         # VIEW GAME BOARDS: Exit
         if user_choice == "X":
@@ -393,4 +417,8 @@ def main() -> None:
 # Good practice to prevent code from running when imported...
 # ...for whatever reason this might've been imported.
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\nEXITING WITH KEYBOARD INTERRUPT")
+        exit(0)

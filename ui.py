@@ -26,7 +26,7 @@ class UI:
         """Display the UI on the screen"""
         text: str = ""
         if self.header:
-            text += self.header_text + ("\n\n" if len(self.options) != 0 else "")
+            text += self.header_text + ("\n\n" if len(self.options) != 0 else "\n")
         for option_key, option_text in self.options:
             text += f"[{option_key}] {option_text}\n"
 
