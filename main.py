@@ -381,7 +381,7 @@ def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
         time.sleep(1)
 
 
-def __main() -> None:
+def main() -> None:
     """Where the root logic is executed"""
     # Update saved boards from disk
     update_board_lists()
@@ -393,4 +393,4 @@ def __main() -> None:
 # Good practice to prevent code from running when imported...
 # ...for whatever reason this might've been imported.
 if __name__ == "__main__":
-    __main()
+    main()
