@@ -72,7 +72,9 @@ class Board:
             raise BoardException("Called `Board.gameify()` on an ungenerated board!")
 
         if not self.difficulty == Board.Difficulty.NONE:
-            raise BoardException("Called `Board.gameify()` on an already gameified board!")
+            raise BoardException(
+                "Called `Board.gameify()` on an already gameified board!"
+            )
 
         self.difficulty: Board.Difficulty = difficulty
         self.type: Board.Type = Board.Type.GAME
@@ -151,7 +153,9 @@ class Board:
     def generate(self, seed: int) -> None:
         """Generate a board with the provided seed"""
         if self.generated:
-            raise BoardException("Called `Board.generate()` on an already generated board!")
+            raise BoardException(
+                "Called `Board.generate()` on an already generated board!"
+            )
 
         Rand.set_seed(seed)  # type: ignore
         self.id: str = str(seed)

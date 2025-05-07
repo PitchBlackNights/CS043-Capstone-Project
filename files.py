@@ -47,7 +47,9 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds
 
 
-def get_all_saved_board_files(save_dir: str = save_dir, abs_path: bool = False) -> list[str]:
+def get_all_saved_board_files(
+    save_dir: str = save_dir, abs_path: bool = False
+) -> list[str]:
     """Returns a list of all *NAME* valid board saves, sorted by numerical value"""
     # =====================
     #     POTENTIAL BUG
@@ -55,7 +57,7 @@ def get_all_saved_board_files(save_dir: str = save_dir, abs_path: bool = False) 
     # A potential bug arises from the fact that all *NAME* valid board saves
     # may not be *DATA* valid.
     #
-    # This means that corruptions withing a save file's data may cause bugs, or
+    # This means that corruptions with a save file's data may cause bugs, or
     # otherwise undefined behavior, when deserializing the data.
 
     # Make sure the save directory actually exists
@@ -135,9 +137,7 @@ def delete_board(board: Board, save_dir: str = save_dir) -> None:
 
     # The provided board hasn't been generated, so raise an error.
     if not board.generated:
-        raise FileException(
-            "Called `files.delete_board()` on an ungenerated board!"
-        )
+        raise FileException("Called `files.delete_board()` on an ungenerated board!")
 
     # The provided board hasn't been saved, so raise an error.
     if not f"{board.id}.board" in filenames:
