@@ -70,6 +70,9 @@ def main_menu() -> None:
 
 def generate_boards() -> None:
     """Menu for generating boards"""
+    # Update the saved boards lists to avoid undefined behavior
+    update_board_lists()
+
     while True:
         generate_boards_ui: UI = UI(
             title="Generate Boards",
@@ -102,6 +105,9 @@ def generate_boards() -> None:
 
 def generate_boards__filled_boards() -> None:
     """Menu for generating filled boards"""
+    # Update the saved boards lists to avoid undefined behavior
+    update_board_lists()
+
     num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
     for cycle in range(num_to_gen):
         board = Board()
@@ -135,15 +141,15 @@ def generate_boards__filled_boards() -> None:
         # GENERATE FILLED BOARDS: Save
         elif user_choice == "1":
             files.save_board(board)
-            # Update the saved boards lists to avoid undefined behavior
-            update_board_lists()
-
             print("Saved board!")
             time.sleep(1)
 
 
 def generate_boards__game_boards() -> None:
     """Menu for generating game boards"""
+    # Update the saved boards lists to avoid undefined behavior
+    update_board_lists()
+
     num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
     print("\nWhat difficulty level?")
     options_ui: UI = UI(
@@ -186,9 +192,6 @@ def generate_boards__game_boards() -> None:
         # GENERATE GAME BOARDS: Save
         elif user_choice == "1":
             files.save_board(board)
-            # Update the saved boards lists to avoid undefined behavior
-            update_board_lists()
-
             print("Saved board!")
             time.sleep(1)
 
@@ -233,6 +236,8 @@ def view_boards__filled_boards() -> None:
     board_page: int = 0
 
     while True:
+        # Update the saved boards lists to avoid undefined behavior
+        update_board_lists()
         pages: int = math.ceil(len(filled_boards) / boards_per_page)
         # Limit the range of `board_page` to avoid undefined behavior
         board_page: int = tools.clamp_int(0, board_page, pages)
@@ -301,6 +306,8 @@ def view_boards__game_boards() -> None:
     board_page: int = 0
 
     while True:
+        # Update the saved boards lists to avoid undefined behavior
+        update_board_lists()
         pages: int = math.ceil(len(game_boards) / boards_per_page)
         # Limit the range of `board_page` to avoid undefined behavior
         board_page: int = tools.clamp_int(0, board_page, pages)
