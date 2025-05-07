@@ -2,6 +2,7 @@ from enum import IntEnum
 from cell import Cell
 from copy import deepcopy
 from rand_man import Rand
+from errors import BoardException
 import random, json
 
 
@@ -47,31 +48,31 @@ class Board:
         self.id: str = ""
         self.type: Board.Type = Board.Type.NONE
         self.difficulty: Board.Difficulty = Board.Difficulty.NONE
-        self.board: list[list[str]] = []
-        self.__board: list[list[Cell]] = []
+        self.board: list[list[str]] = [[" " for _ in range(9)] for _ in range(9)]
+        self.__board: list[list[Cell]] = [[Cell() for _ in range(9)] for _ in range(9)]
         self.generated: bool = False
 
         # Populate `self.board` with a 2D list with 9x9 dimensions
-        row_norm: list[str] = []
-        for _ in range(9):
-            row_norm.append(" ")
-        for _ in range(9):
-            self.board.append(deepcopy(row_norm))
+        # row_norm: list[str] =
+        # for _ in range(9):
+        #     row_norm.append(" ")
+        # for _ in range(9):
+        #     self.board.append(deepcopy(row_norm))
 
         # Populate `self.__board` with a 2D list with 9x9 dimensions
-        row_hide: list[Cell] = []
-        for _ in range(9):
-            row_hide.append(Cell())
-        for _ in range(9):
-            self.__board.append(deepcopy(row_hide))
+        # row_hide: list[Cell] = []
+        # for _ in range(9):
+        #     row_hide.append(Cell())
+        # for _ in range(9):
+        #     self.__board.append(deepcopy(row_hide))
 
     def gameify(self, difficulty: Difficulty) -> None:
         """Convert a full board into a game board by removing cells"""
         if not self.generated:
-            raise Exception("Called `Board.gameify()` on an ungenerated board!")
+            raise BoardException("Called `Board.gameify()` on an ungenerated board!")
 
         if not self.difficulty == Board.Difficulty.NONE:
-            raise Exception("Called `Board.gameify()` on an already gameified board!")
+            raise BoardException("Called `Board.gameify()` on an already gameified board!")
 
         self.difficulty: Board.Difficulty = difficulty
         self.type: Board.Type = Board.Type.GAME
@@ -124,7 +125,7 @@ class Board:
     ) -> str:
         """Serialize the board data into a JSON string"""
         if not self.generated:
-            raise Exception("Called `Board.serialize()` on an ungenerated board!")
+            raise BoardException("Called `Board.serialize()` on an ungenerated board!")
         data: dict[str, str | int | list[list[str]]] = {
             "id": self.id,
             "type": int(self.type),
@@ -150,7 +151,7 @@ class Board:
     def generate(self, seed: int) -> None:
         """Generate a board with the provided seed"""
         if self.generated:
-            raise Exception("Called `Board.generate()` on an already generated board!")
+            raise BoardException("Called `Board.generate()` on an already generated board!")
 
         Rand.set_seed(seed)  # type: ignore
         self.id: str = str(seed)

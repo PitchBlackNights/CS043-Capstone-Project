@@ -1,6 +1,7 @@
 from board import Board
 import os, pathlib, shutil, time
 from copy import deepcopy
+from errors import FileException
 
 # Directory to save boards
 save_dir: str = os.path.abspath("./saved_boards")
@@ -24,6 +25,9 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     # Make sure the save directory actually exists
     pathlib.Path(save_dir).mkdir(parents=True, exist_ok=True)
     file_path = os.path.abspath(f"{save_dir}/{board.id}.board")
+
+    if not board.generated:
+        raise FileException("Called `files.save_board()` on an ungenerated board!")
 
     # Create the save file, and prompt user if it already exists
     try:
@@ -118,19 +122,19 @@ def delete_board(board: Board, save_dir: str = save_dir) -> None:
 
     # There are no saved boards, so raise an error.
     if len(filenames) == 0:
-        raise Exception(
+        raise FileException(
             "Called `files.delete_board()` when there are no boards actively saved!"
         )
 
     # The provided board hasn't been generated, so raise an error.
     if not board.generated:
-        raise Exception(
+        raise FileException(
             "Called `files.delete_board()` on an ungenerated board!"
         )
 
     # The provided board hasn't been saved, so raise an error.
     if not f"{board.id}.board" in filenames:
-        raise Exception(
+        raise FileException(
             "Called `files.delete_board()` on a board the hasn't been saved!"
         )
 
