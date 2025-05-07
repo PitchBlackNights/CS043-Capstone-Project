@@ -23,26 +23,26 @@ class UI:
         self.options: list[tuple[str, str]] = options
 
     def show(self, clr_screen: bool = True):
-        """Display the UI on the screen"""
-        text: str = ""
-        if self.header:
+        """Display the UI on the screen."""
+        text: str = ""  # Initialize the text to display
+        if self.header:  # If the header is enabled, add it to the text
             text += self.header_text + ("\n\n" if len(self.options) != 0 else "\n")
-        for option_key, option_text in self.options:
+        for option_key, option_text in self.options:  # Add each option to the text
             text += f"[{option_key}] {option_text}\n"
 
-        if clr_screen:
+        if clr_screen:  # Clear the screen if the flag is set
             clear_screen()
-        print(text)
+        print(text)  # Print the constructed UI text
 
     def get_choice(self) -> str:
-        """Get a valid choice from the user"""
-        valid_keys: list[str] = [key for key, _ in self.options]
+        """Get a valid choice from the user."""
+        valid_keys: list[str] = [key for key, _ in self.options]  # Extract valid keys
         while True:
-            user_choice: str = input("Option: ")
-            if not user_choice in valid_keys:
-                print(f"ERROR: '{user_choice}' is not a valid option!")
-                time.sleep(1)
-                # Sets cursor 2 lines up, then erases to the end of the screen
+            user_choice: str = input("Option: ")  # Prompt the user for input
+            if not user_choice in valid_keys:  # Check if the input is invalid
+                print(f"ERROR: '{user_choice}' is not a valid option!")  # Show error
+                time.sleep(2)  # Pause briefly to let the user read the error
+                # Move the cursor up 2 lines and clear the screen from that point
                 print("\x1b[2F\x1b[0J", end="")
             else:
-                return user_choice
+                return user_choice  # Return the valid user choice

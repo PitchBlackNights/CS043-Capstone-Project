@@ -55,6 +55,7 @@ def main_menu() -> None:
         main_menu_ui.show()
         user_choice: str = main_menu_ui.get_choice()
 
+        # Handle user choice for the main menu
         # MAIN MENU: Exit
         if user_choice == "X":
             quit()
@@ -86,6 +87,7 @@ def generate_boards() -> None:
         generate_boards_ui.show()
         user_choice: str = generate_boards_ui.get_choice()
 
+        # Handle user choice for the "Generate Boards" menu
         # GENERATE BOARDS: Exit
         if user_choice == "X":
             quit()
@@ -104,21 +106,24 @@ def generate_boards() -> None:
 
 
 def generate_boards__filled_boards() -> None:
-    """Menu for generating filled boards"""
+    """Menu for generating filled boards."""
     # Update the saved boards lists to avoid undefined behavior
     update_board_lists()
 
+    # Prompt the user for the number of boards to generate
     num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
     for cycle in range(num_to_gen):
-        board = Board()
-        board.generate(Board.last_seed + 1)
+        board = Board()  # Create a new board instance
+        board.generate(Board.last_seed + 1)  # Generate a filled board with a new seed
 
+        # Display the progress of board generation
         show_board_ui: UI = UI(
             title=f"Generating Boards ({cycle + 1}/{num_to_gen}...)",
         )
         show_board_ui.show()
         print(f"Board #{board.id}\n{board.format()}\n")
 
+        # Display options for saving or skipping the generated board
         options_ui: UI = UI(
             header=False,
             options=[("1", "Save"), ("2", "Skip\n"), ("B", "Back"), ("X", "Exit")],
@@ -126,6 +131,7 @@ def generate_boards__filled_boards() -> None:
         options_ui.show(clr_screen=False)
         user_choice: str = options_ui.get_choice()
 
+        # Handle user choice for the generated board
         # GENERATE FILLED BOARDS: Exit
         if user_choice == "X":
             quit()
@@ -146,12 +152,15 @@ def generate_boards__filled_boards() -> None:
 
 
 def generate_boards__game_boards() -> None:
-    """Menu for generating game boards"""
+    """Menu for generating game boards."""
     # Update the saved boards lists to avoid undefined behavior
     update_board_lists()
 
+    # Prompt the user for the number of boards to generate
     num_to_gen: int = tools.get_int("Number of boards to generate (0 = Cancel): ")
-    print("\nWhat difficulty level?")
+    print("\nWhat difficulty level?")  # Ask the user for the difficulty level
+
+    # Display difficulty options and get the user's choice
     options_ui: UI = UI(
         header=False,
         options=[("1", "Easy"), ("2", "Medium"), ("3", "Hard")],
@@ -159,17 +168,20 @@ def generate_boards__game_boards() -> None:
     options_ui.show(clr_screen=False)
     user_difficulty: Board.Difficulty = Board.Difficulty(int(options_ui.get_choice()))
 
+    # Generate the specified number of boards
     for cycle in range(num_to_gen):
-        board = Board()
-        board.generate(Board.last_seed + 1)
-        board.gameify(user_difficulty)
+        board = Board()  # Create a new board instance
+        board.generate(Board.last_seed + 1)  # Generate a filled board with a new seed
+        board.gameify(user_difficulty)  # Convert the board into a game board with the chosen difficulty
 
+        # Display the progress of board generation
         show_board_ui: UI = UI(
             title=f"Generating Boards ({cycle + 1}/{num_to_gen}...)",
         )
         show_board_ui.show()
         print(f"Board #{board.id} (DIFF: {str(board.difficulty)})\n{board.format()}\n")
 
+        # Display options for saving or skipping the generated board
         options_ui: UI = UI(
             header=False,
             options=[("1", "Save"), ("2", "Skip\n"), ("B", "Back"), ("X", "Exit")],
@@ -177,6 +189,7 @@ def generate_boards__game_boards() -> None:
         options_ui.show(clr_screen=False)
         user_choice: str = options_ui.get_choice()
 
+        # Handle user choice for the generated board
         # GENERATE GAME BOARDS: Exit
         if user_choice == "X":
             quit()
@@ -238,9 +251,14 @@ def view_boards__filled_boards() -> None:
     while True:
         # Update the saved boards lists to avoid undefined behavior
         update_board_lists()
-        pages: int = math.ceil(len(filled_boards) / boards_per_page)
+
+        pages: int = max(
+            1, math.ceil(len(filled_boards) / boards_per_page)
+        )  # Ensure at least 1 page
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = tools.clamp_int(0, board_page, pages)
+        board_page: int = tools.clamp_int(
+            0, board_page, pages - 1
+        )
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(filled_boards)),
@@ -266,7 +284,7 @@ def view_boards__filled_boards() -> None:
         ui_options.append(("X", "Exit"))
 
         filled_boards_ui: UI = UI(
-            title=f"Viewing Filled Boards ({board_page + 1}/{max(pages, 1)})",
+            title=f"Viewing Filled Boards ({board_page + 1}/{pages})",
         )
         filled_boards_ui_options: UI = UI(
             header=False,
@@ -308,9 +326,14 @@ def view_boards__game_boards() -> None:
     while True:
         # Update the saved boards lists to avoid undefined behavior
         update_board_lists()
-        pages: int = math.ceil(len(game_boards) / boards_per_page)
+
+        pages: int = max(
+            1, math.ceil(len(game_boards) / boards_per_page)
+        )  # Ensure at least 1 page
         # Limit the range of `board_page` to avoid undefined behavior
-        board_page: int = tools.clamp_int(0, board_page, pages)
+        board_page: int = tools.clamp_int(
+            0, board_page, pages - 1
+        )
         page_range = range(
             board_page * boards_per_page,
             min((board_page * boards_per_page) + boards_per_page, len(game_boards)),
@@ -341,7 +364,7 @@ def view_boards__game_boards() -> None:
         ui_options.append(("X", "Exit"))
 
         game_boards_ui: UI = UI(
-            title=f"Viewing Game Boards ({board_page + 1}/{max(pages, 1)})",
+            title=f"Viewing Game Boards ({board_page + 1}/{pages})",
         )
         game_boards_ui_options: UI = UI(
             header=False,
@@ -379,13 +402,16 @@ def view_boards__game_boards() -> None:
 
 
 def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
+    """Displays a single board with options to delete or go back."""
+    # Display the board details, including difficulty if applicable
     show_board_ui: UI = UI(
         title=f"Viewing Board #{board.id}"
         + (f" (DIFF: {board.difficulty})" if difficulty else "")
     )
     show_board_ui.show()
-    print(f"{board.format()}\n")
+    print(f"{board.format()}\n")  # Print the board's formatted representation
 
+    # Display options for the user to delete the board, go back, or exit
     show_board_ui_options: UI = UI(
         header=False,
         options=[("D", "Delete"), ("B", "Back"), ("X", "Exit")],
@@ -393,6 +419,7 @@ def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
     show_board_ui_options.show(clr_screen=False)
     user_choice: str = show_board_ui_options.get_choice()
 
+    # Handle user choice for the board
     # SHOW BOARD UI OPTIONS: Exit
     if user_choice == "X":
         quit()
@@ -403,12 +430,12 @@ def view_boards__show_board_ui(board: Board, difficulty: bool = False) -> None:
 
     # SHOW BOARD UI OPTIONS: Delete
     elif user_choice == "D":
-        files.delete_board(board)
+        files.delete_board(board) # Delete the board from storage
 
-        # Update the saved boards lists to avoid undefined behavior
+        # Update the saved boards lists to reflect the deletion
         update_board_lists()
 
-        print("Deleted board!")
+        print("Deleted board!")  # Notify the user of the deletion
         time.sleep(1)
 
 

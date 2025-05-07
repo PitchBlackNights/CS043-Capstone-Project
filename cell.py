@@ -28,10 +28,8 @@ class Cell:
 
     def remove_choice(self, val: int) -> None:
         """Removes `val` from cell's `options`"""
-        for index in range(len(self.options)):
-            if self.options[index] == val:
-                self.options.pop(index)
-                break
+        if val in self.options:
+            self.options.remove(val)
 
     def collapse(self) -> None:
         """Collapses the cell into a random, valid, option"""

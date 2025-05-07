@@ -66,19 +66,12 @@ def get_all_saved_board_files(
 
     # Remove any invalid files from `filenames`
     filenames_copy: list[str] = deepcopy(filenames)
-    for index, filename in enumerate(filenames):
+    for filename in filenames:
         name: str = os.path.splitext(filename)[0]
         ext: str = os.path.splitext(filename)[1]
 
-        is_int: bool = False
-        try:
-            _: int = int(name)
-            is_int: bool = True
-        except ValueError:
-            pass
-
-        if ext != ".board" or not is_int:
-            filenames_copy.pop(index)
+        if ext != ".board" or not name.isdigit():
+            filenames_copy.remove(filename)
     filenames: list[str] = filenames_copy
 
     # Sort the files based on numerical value instead of characters
@@ -114,14 +107,19 @@ def load_saved_boards(save_dir: str = save_dir) -> list[Board]:
                 tmp_board: Board = serde.deserialize(file.read())
                 boards.append(tmp_board)
             except DeserializerException as err:
-                print(f"ERROR: A board save file is corrupted! ('{filename}')\nPROBLEMS:")
+                print(
+                    f"ERROR: A board save file is corrupted! ('{filename}')\nPROBLEMS:"
+                )
                 print(f"\t{'\t'.join(f'{line}\n' for line in str(err).splitlines())}")
                 input("Press enter to continue...")
                 print("Deleting the board save...\n")
                 time.sleep(2)
                 delete_board: bool = True
         if delete_board:
-            delete_path(f"{save_dir}/{filename}")
+            try:
+                delete_path(f"{save_dir}/{filename}")
+            except Exception as e:
+                print(f"ERROR: Failed to delete corrupted file '{filename}': {e}")
 
     return boards
 
