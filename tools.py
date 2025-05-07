@@ -17,3 +17,43 @@ def get_int(text: str) -> int:
             time.sleep(1)
             # Sets cursor 2 lines up, then erases to the end of the screen
             print("\x1b[2F\x1b[0J", end="")
+
+
+# ======================================================================================
+# DEV TOOLS
+# ======================================================================================
+
+
+def clear_all_saved_boards() -> None:
+    import files
+
+    for file in files.get_all_saved_board_files(abs_path=True):
+        files.delete_path(file)
+
+
+def clear_all_filled_boards() -> None:
+    from board import Board
+    import files, json
+
+    to_delete: list[str] = []
+    for file in files.get_all_saved_board_files(abs_path=True):
+        with open(file, "r") as f:
+            data = json.loads(f.read())
+            if data["type"] == Board.Type.FULL:
+                to_delete.append(file)
+    for file in to_delete:
+        files.delete_path(file)
+
+
+def clear_all_game_boards() -> None:
+    from board import Board
+    import files, json
+
+    to_delete: list[str] = []
+    for file in files.get_all_saved_board_files(abs_path=True):
+        with open(file, "r") as f:
+            data = json.loads(f.read())
+            if data["type"] == Board.Type.GAME:
+                to_delete.append(file)
+    for file in to_delete:
+        files.delete_path(file)

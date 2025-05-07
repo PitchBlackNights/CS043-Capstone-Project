@@ -47,7 +47,7 @@ def save_board(board: Board, save_dir: str = save_dir) -> None:
     time.sleep(0.100)  # 0.100 Seconds == 100 Milliseconds
 
 
-def get_all_saved_board_files(save_dir: str = save_dir) -> list[str]:
+def get_all_saved_board_files(save_dir: str = save_dir, abs_path: bool = False) -> list[str]:
     """Returns a list of all *NAME* valid board saves, sorted by numerical value"""
     # =====================
     #     POTENTIAL BUG
@@ -90,6 +90,13 @@ def get_all_saved_board_files(save_dir: str = save_dir) -> list[str]:
         for j in range(i + 1, len(filenames)):
             if int(filenames[i][:-6]) > int(filenames[j][:-6]):
                 filenames[i], filenames[j] = filenames[j], filenames[i]
+
+    # Return the Absolute Paths of the files if requested
+    if abs_path:
+        filenames_copy: list[str] = []
+        for filename in filenames:
+            filenames_copy.append(os.path.abspath(f"{save_dir}/{filename}"))
+        filenames: list[str] = filenames_copy
 
     return filenames
 
